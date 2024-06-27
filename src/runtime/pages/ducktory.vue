@@ -1,3 +1,11 @@
+<script setup lang="ts">
+import { stories } from '#build/ducktory-stories.mjs'
+</script>
+
 <template>
-    <h1>Hello World</h1>
+  <component
+    :is="story"
+    v-for="story in stories"
+    :key="story"
+  />
 </template>
