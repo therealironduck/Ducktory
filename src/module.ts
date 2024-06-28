@@ -1,7 +1,7 @@
-import fs from 'node:fs'
-import path from 'node:path'
-import { defineNuxtModule, extendPages, createResolver, addLayout, addComponent, logger, addTemplate } from '@nuxt/kit'
-import { colors } from 'consola/utils'
+import { defineNuxtModule, extendPages, createResolver, addLayout, addImportsDir } from '@nuxt/kit'
+import { ducktoryLog } from './build/utils'
+import { loadStories } from './build/stories'
+import { extendBundler } from './build/bundler'
 
 export interface DucktoryOptions {
   path: string
@@ -33,38 +33,10 @@ export default defineNuxtModule<DucktoryOptions>({
     ducktoryLog('Ready!')
     console.log('')
 
+    loadStories(_options, _nuxt)
+    extendBundler(_nuxt)
+
     const resolver = createResolver(import.meta.url)
-    const storyComponents: string[] = []
-    let storyIndex = 0
-
-    _options.debug && ducktoryLog('Loading stories...')
-
-    fs.readdirSync(path.join(_nuxt.options.rootDir, _options.storyDirectory)).forEach((file) => {
-      if (!file.endsWith('.story.vue')) {
-        _options.debug && ducktoryLog(`Skipping: "${file}". Not a story file.`, 'warn')
-        return
-      }
-
-      const name = _options.storyComponentPrefix + (++storyIndex)
-      _options.debug && ducktoryLog(`Found story: "${file}". Registring as "${name}"`, 'success')
-
-      addComponent({
-        name,
-        filePath: path.join(_nuxt.options.rootDir, 'stories', file),
-        global: true,
-      })
-      storyComponents.push(name)
-    })
-
-    _options.debug && ducktoryLog(`Complete! Found ${storyComponents.length} stories.`, 'success')
-    _options.debug && console.log('')
-
-    const json = JSON.stringify(storyComponents, null, 2)
-    addTemplate({
-      filename: 'ducktory-stories.mjs',
-      getContents: () => `export const stories = ${json};`,
-    })
-
     addLayout(resolver.resolve('runtime/ducktoryLayout.vue'), 'ducktory')
     extendPages((pages) => {
       pages.unshift({
@@ -74,22 +46,9 @@ export default defineNuxtModule<DucktoryOptions>({
         meta: { layout: 'ducktory' },
       })
     })
+
+    _nuxt.options.css.push(resolver.resolve('./runtime/tailwind.css'))
+
+    addImportsDir(resolver.resolve('runtime/composables'))
   },
 })
-
-function ducktoryLog(message: string, level: 'info' | 'warn' | 'success' = 'info') {
-  let method = logger.info
-  switch (level) {
-    case 'warn':
-      method = logger.fail
-      break
-    case 'success':
-      method = logger.success
-      break
-  }
-
-  method([
-    colors.yellow('🦆 [Ducktory]'),
-    message,
-  ].join(' '))
-}

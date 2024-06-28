@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { stories } from '#build/ducktory-stories.mjs'
+const { stories } = useDucktory()
 </script>
 
 <template>
   <component
-    :is="story"
+    :is="story.componentName"
     v-for="story in stories"
-    :key="story"
+    :key="story.componentName"
   />
 </template>
