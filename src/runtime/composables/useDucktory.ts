@@ -2,7 +2,7 @@ import type { StoryDefinition } from '../../types/StoryDefinition'
 import { stories as raw } from '#build/ducktory-stories.mjs'
 
 export function useDucktory() {
-  const stories = raw as StoryDefinition[]
+  const stories = raw as { [k: string]: StoryDefinition }
 
   const getName = (story: StoryDefinition): string => {
     return story.meta?.name || splitPascalCase(story.originalComponentName)

@@ -1,3 +1,4 @@
+import path from 'node:path'
 import { defineNuxtModule, extendPages, createResolver, addLayout, addImportsDir } from '@nuxt/kit'
 import { ducktoryLog } from './build/utils'
 import { loadStories } from './build/stories'
@@ -42,7 +43,14 @@ export default defineNuxtModule<DucktoryOptions>({
       pages.unshift({
         name: 'ducktory',
         path: _options.path,
-        file: resolver.resolve('runtime/pages/ducktory.vue'),
+        file: resolver.resolve('runtime/pages/index.vue'),
+        meta: { layout: 'ducktory' },
+      })
+
+      pages.unshift({
+        name: 'ducktory-story',
+        path: path.join(_options.path, '/:story'),
+        file: resolver.resolve('runtime/pages/story.vue'),
         meta: { layout: 'ducktory' },
       })
     })

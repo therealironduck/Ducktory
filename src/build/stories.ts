@@ -12,7 +12,7 @@ import type { StoryDefinition } from '../types/StoryDefinition'
 import { ducktoryLog } from './utils'
 
 export function loadStories(options: DucktoryOptions, nuxt: Nuxt) {
-  const stories: StoryDefinition[] = []
+  const stories: { [k: string]: StoryDefinition } = {}
   let storyIndex = 0
 
   options.debug && ducktoryLog('Loading stories...')
@@ -39,21 +39,22 @@ export function loadStories(options: DucktoryOptions, nuxt: Nuxt) {
     })
 
     const meta = readStoryMeta(filePath, options)
+    const originalName = file.replace('.story.vue', '')
     if (!meta) {
-      stories.push({
+      stories[originalName] = {
         id: storyIndex,
         componentName: name,
-        originalComponentName: file.replace('.story.vue', ''),
-      })
+        originalComponentName: originalName,
+      }
       return
     }
 
-    stories.push({
+    stories[originalName] = {
       id: storyIndex,
       componentName: name,
-      originalComponentName: file.replace('.story.vue', ''),
+      originalComponentName: originalName,
       meta,
-    })
+    }
   })
 
   options.debug && ducktoryLog(`Complete! Found ${stories.length} stories.`, 'success')
