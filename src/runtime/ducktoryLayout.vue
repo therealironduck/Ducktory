@@ -9,9 +9,12 @@ const { stories, getName } = useDucktory()
     >
       <header class="ducktory-py-4 ducktory-mx-4 ducktory-border-b ducktory-border-b-gray-300">
         <div class="ducktory-flex ducktory-items-center ducktory-gap-3">
-          <h1 class="ducktory-text-2xl ducktory-font-bold ducktory-text-amber-700">
+          <NuxtLink
+            :to="{ name: 'ducktory' }"
+            class="ducktory-text-2xl ducktory-font-bold ducktory-text-amber-700"
+          >
             Ducktory
-          </h1>
+          </NuxtLink>
           <span class="ducktory-text-sm ducktory-font-light ducktory-text-gray-800">v0.1.0</span>
         </div>
 
@@ -47,6 +50,7 @@ const { stories, getName } = useDucktory()
           :key="'story_nav_' + story.id"
           :to="{ name: 'ducktory-story', params: { story: story.originalComponentName } }"
           class="ducktory-px-4 ducktory-py-3 hover:ducktory-bg-gray-300 ducktory-block"
+          active-class="ducktory-bg-gray-300"
         >
           {{ getName(story) }}
         </NuxtLink>
