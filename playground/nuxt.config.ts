@@ -1,5 +1,8 @@
 export default defineNuxtConfig({
   modules: ['../src/module'],
-  ducktory: {},
+  ducktory: {
+    enabled: true,
+    debug: true,
+  },
   devtools: { enabled: true },
 })
