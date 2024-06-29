@@ -11,18 +11,17 @@ const title = computed(() => getName(story.value))
 
 <template>
   <template v-if="story">
-    <h1
-      class="ducktory-text-2xl ducktory-font-semibold"
-      v-text="title"
-    />
+    <h1 class="ducktory-text-2xl ducktory-font-semibold" v-text="title" />
 
     <div class="ducktory-bg-white ducktory-mt-4 ducktory-shadow-md ducktory-rounded-t-xl ducktory-p-4">
-      <component
-        :is="story.componentName"
-        v-if="story"
-      />
+      <component :is="story.componentName" />
+      <br><br>
+      <pre><code>
+      {{ story.code }}
+    </code></pre>
     </div>
-    <div class="ducktory-bg-white ducktory-overflow-hidden ducktory-border-t ducktory-rounded-b-xl ducktory-border-t-gray-200 ducktory-flex ducktory-items-center">
+    <div
+      class="ducktory-bg-white ducktory-overflow-hidden ducktory-border-t ducktory-rounded-b-xl ducktory-border-t-gray-200 ducktory-flex ducktory-items-center">
       <DucktoryActionBtn :active="true">
         Preview
       </DucktoryActionBtn>
