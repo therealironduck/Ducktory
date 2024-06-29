@@ -5,7 +5,10 @@ export default {
   ],
   prefix: 'ducktory-',
   theme: {
-    extend: {},
+    fontFamily: {
+      main: '\'Alegreya Sans\', \'sans-serif\'',
+    },
+    extend: { },
   },
   plugins: [],
 }

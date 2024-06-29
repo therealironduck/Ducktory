@@ -3,16 +3,16 @@ const { stories, getName } = useDucktory()
 </script>
 
 <template>
-  <div class="ducktory-flex ducktory-min-h-screen">
+  <div class="ducktory-flex ducktory-min-h-screen ducktory-font-main">
     <aside
       class="ducktory-w-1/3 ducktory-max-w-80 ducktory-bg-gray-200 ducktory-border-r-2 ducktory-border-r-gray-400 ducktory-flex ducktory-flex-col"
     >
       <header class="ducktory-py-4 ducktory-mx-4 ducktory-border-b ducktory-border-b-gray-300">
-        <div class="ducktory-flex ducktory-items-center ducktory-gap-3 ducktory-leading-none">
-          <h1 class="ducktory-text-xl ducktory-font-bold ducktory-text-amber-700">
+        <div class="ducktory-flex ducktory-items-center ducktory-gap-3">
+          <h1 class="ducktory-text-2xl ducktory-font-bold ducktory-text-amber-700">
             Ducktory
           </h1>
-          <span class="ducktory-text-sm ducktory-text-gray-800">v0.1.0</span>
+          <span class="ducktory-text-sm ducktory-font-light ducktory-text-gray-800">v0.1.0</span>
         </div>
 
         <div class="ducktory-flex ducktory-items-center ducktory-text-gray-600 ducktory-gap-2 ducktory-mt-1">
@@ -37,7 +37,7 @@ const { stories, getName } = useDucktory()
               d="M6.5 18c-1 0-1.5-.672-1.5-1.5S5.5 15 6.5 15M6.5 21c-1 0-1.5-.672-1.5-1.5S5.5 18 6.5 18"
             />
           </svg>
-          <span class="ducktory-text-xs">Found {{ Object.keys(stories).length }} stories</span>
+          <span class="ducktory-text-sm">Found {{ Object.keys(stories).length }} stories</span>
         </div>
       </header>
 

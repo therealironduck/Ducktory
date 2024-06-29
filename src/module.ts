@@ -55,7 +55,8 @@ export default defineNuxtModule<DucktoryOptions>({
       })
     })
 
-    _nuxt.options.css.push(resolver.resolve('./runtime/tailwind.css'))
+    _nuxt.options.css.push(resolver.resolve('./runtime/assets/tailwind.css'))
+    _nuxt.options.css.push(resolver.resolve('./runtime/assets/fonts.css'))
 
     addImportsDir(resolver.resolve('runtime/composables'))
   },

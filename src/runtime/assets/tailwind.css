@@ -666,14 +666,18 @@ video {
   text-align: center;
 }
 
+.ducktory-font-main {
+  font-family: 'Alegreya Sans', 'sans-serif';
+}
+
+.ducktory-text-2xl {
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+
 .ducktory-text-sm {
   font-size: 0.875rem;
   line-height: 1.25rem;
-}
-
-.ducktory-text-xl {
-  font-size: 1.25rem;
-  line-height: 1.75rem;
 }
 
 .ducktory-text-xs {
@@ -685,8 +689,12 @@ video {
   font-weight: 700;
 }
 
-.ducktory-leading-none {
-  line-height: 1;
+.ducktory-font-light {
+  font-weight: 300;
+}
+
+.ducktory-font-semibold {
+  font-weight: 600;
 }
 
 .ducktory-text-amber-700 {
