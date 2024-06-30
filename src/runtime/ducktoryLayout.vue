@@ -64,7 +64,7 @@ const { stories, getName } = useDucktory()
         >jkniest</a>
       </footer>
     </aside>
-    <main class="ducktory-bg-gray-100 ducktory-flex-1 ducktory-p-8">
+    <main class="ducktory-bg-gray-100 ducktory-flex-1 ducktory-p-8" style="max-width: calc(100vw - 20rem)">
       <NuxtPage />
     </main>
   </div>

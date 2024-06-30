@@ -595,6 +595,10 @@ video {
   width: 33.333333%;
 }
 
+.ducktory-min-w-full {
+  min-width: 100%;
+}
+
 .ducktory-max-w-80 {
   max-width: 20rem;
 }
@@ -627,14 +631,12 @@ video {
   overflow: hidden;
 }
 
-.ducktory-rounded-b-xl {
-  border-bottom-right-radius: 0.75rem;
-  border-bottom-left-radius: 0.75rem;
+.ducktory-overflow-scroll {
+  overflow: scroll;
 }
 
-.ducktory-rounded-t-xl {
-  border-top-left-radius: 0.75rem;
-  border-top-right-radius: 0.75rem;
+.ducktory-rounded-xl {
+  border-radius: 0.75rem;
 }
 
 .ducktory-border-b {
