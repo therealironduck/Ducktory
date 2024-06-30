@@ -33,6 +33,7 @@
     "consola": "^3.2.3",
     "estree-walker": "^3.0.3",
     "magic-string": "^0.30.10",
+    "shiki": "^1.10.0",
     "unplugin": "^1.10.2"
   },
   "devDependencies": {

@@ -39,12 +39,14 @@ export function loadStories(options: DucktoryOptions, nuxt: Nuxt) {
     })
 
     const meta = readStoryMeta(filePath, options)
+    const code = readStoryCode(filePath, options)
     const originalName = file.replace('.story.vue', '')
     if (!meta) {
       stories[originalName] = {
         id: storyIndex,
         componentName: name,
         originalComponentName: originalName,
+        code
       }
       return
     }
@@ -54,10 +56,11 @@ export function loadStories(options: DucktoryOptions, nuxt: Nuxt) {
       componentName: name,
       originalComponentName: originalName,
       meta,
+      code
     }
   })
 
-  options.debug && ducktoryLog(`Complete! Found ${stories.length} stories.`, 'success')
+  options.debug && ducktoryLog(`Complete! Found ${Object.keys(stories).length} stories.`, 'success')
   options.debug && console.log('')
 
   const json = JSON.stringify(stories, null, 2)
@@ -102,6 +105,19 @@ function readStoryMeta(path: string, options: DucktoryOptions): StoryMeta | unde
   if (extract) {
     return evalValue(extract)
   }
+}
+
+function readStoryCode(path: string, options: DucktoryOptions): string {
+  const content = readFileSync(path).toString()
+  if (!content.includes('template')) {
+    return ''
+  }
+
+  // Get content of template tag onn content string without regex and using something smart
+  const { descriptor } = parseSFC(content)
+  const { template } = descriptor
+
+  return template?.content ?? ''
 }
 
 function evalValue(value: string): StoryMeta | undefined {

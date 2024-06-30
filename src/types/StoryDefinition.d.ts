@@ -5,4 +5,5 @@ export type StoryDefinition = {
   componentName: string
   originalComponentName: string
   meta?: StoryMeta | undefined
+  code: string
 }
