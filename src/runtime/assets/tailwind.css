@@ -619,6 +619,10 @@ video {
   align-items: center;
 }
 
+.ducktory-justify-end {
+  justify-content: flex-end;
+}
+
 .ducktory-gap-2 {
   gap: 0.5rem;
 }
@@ -775,6 +779,10 @@ video {
 .ducktory-text-gray-800 {
   --tw-text-opacity: 1;
   color: rgb(31 41 55 / var(--tw-text-opacity));
+}
+
+.ducktory-underline {
+  text-decoration-line: underline;
 }
 
 .ducktory-shadow-md {

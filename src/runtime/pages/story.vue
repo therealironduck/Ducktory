@@ -11,10 +11,20 @@ const story = computed(() => stories[params.story] ?? null)
 const title = computed(() => story.value ? getName(story.value) : '')
 
 const codeHighlight = ref('Loading...');
+const justCopied = ref(false);
+
 watch(story, async (newStory) => {
   if (!newStory) return
   codeHighlight.value = await codeToHtml(newStory.code + "\n", { lang: 'html', theme: 'catppuccin-latte' })
 }, { immediate: true });
+
+function copy() {
+  navigator.clipboard.writeText(story.value.code);
+  justCopied.value = true;
+  setTimeout(() => {
+    justCopied.value = false;
+  }, 1500);
+}
 </script>
 
 <template>
@@ -30,6 +40,9 @@ watch(story, async (newStory) => {
       </template>
       <template #tab-code>
         <div class="ducktory-overflow-scroll ducktory-min-w-full ducktory-code-wrapper" v-html="codeHighlight"></div>
+        <div class="ducktory-flex ducktory-justify-end ducktory-mt-2 ducktory-text-sm">
+          <a href="#" @click.prevent="copy" class="ducktory-underline ducktory-text-amber-700" v-text="justCopied ? 'Copied!' : 'Copy'" />
+        </div>
       </template>
       <template #tab-docs>docs</template>
 
