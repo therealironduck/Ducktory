@@ -2,6 +2,7 @@
 import DucktoryActionBtn from '../components/DucktoryActionBtn'
 import DucktoryTabContainer from '../components/DucktoryTabContainer'
 import { codeToHtml } from 'shiki'
+import { stories as raw } from '#build/ducktory-stories.mjs'
 
 const { stories, getName } = useDucktory()
 
@@ -30,6 +31,7 @@ function copy() {
 <template>
   <template v-if="story !== undefined">
     <h1 class="ducktory-text-2xl ducktory-font-semibold" v-text="title" />
+    {{ raw }}
 
     <DucktoryTabContainer
       class="ducktory-bg-white ducktory-mt-4 ducktory-overflow-hidden ducktory-shadow-md ducktory-rounded-xl ducktory-p4"

@@ -1,7 +1,7 @@
 import path from 'node:path'
 import fs, { readFileSync } from 'node:fs'
 import type { Nuxt } from '@nuxt/schema'
-import { addComponent, addTemplate } from '@nuxt/kit'
+import { addComponent, addTemplate, updateTemplates } from '@nuxt/kit'
 import { parse as parseSFC, compileScript } from '@vue/compiler-sfc'
 import MagicString from 'magic-string'
 import { walk } from 'estree-walker'
@@ -11,10 +11,49 @@ import type { StoryMeta } from '../types/StoryMeta'
 import type { StoryDefinition } from '../types/StoryDefinition'
 import { ducktoryLog } from './utils'
 
-export function loadStories(options: DucktoryOptions, nuxt: Nuxt) {
-  const stories: { [k: string]: StoryDefinition } = {}
-  let storyIndex = 0
+let storyIndex = 0;
+const stories: { [k: string]: StoryDefinition } = {};
 
+const TEMPLATE_FILE = 'ducktory-stories.mjs'
+
+export function loadStoryTemplate(options: DucktoryOptions, nuxt: Nuxt) {
+  loadInitialStories(options, nuxt);
+  addTemplate({
+    filename: TEMPLATE_FILE,
+    getContents: () => buildStoryJson(),
+  })
+}
+
+export function addStory(file: string, options: DucktoryOptions, nuxt: Nuxt, updateTemplate: boolean = true) {
+  const filePath = path.join(nuxt.options.rootDir, options.storyDirectory, file)
+  const originalName = file.replace('.story.vue', '')
+
+  const name = options.storyComponentPrefix + (++storyIndex)
+  options.debug && ducktoryLog(`Found story: "${file}". Registring as "${name}"`, 'success')
+
+  addComponent({
+    name,
+    filePath,
+    global: true,
+  })
+
+  const meta = readStoryMeta(filePath, options)
+  const code = readStoryCode(filePath, options)
+
+  stories[originalName] = {
+    id: storyIndex,
+    componentName: name,
+    originalComponentName: originalName,
+    meta,
+    code
+  }
+
+  if(updateTemplate) {
+    updateTemplates({ filter: t => t.filename === TEMPLATE_FILE })
+  }
+}
+
+function loadInitialStories(options: DucktoryOptions, nuxt: Nuxt) {
   options.debug && ducktoryLog('Loading stories...')
   const storyPath = path.join(nuxt.options.rootDir, options.storyDirectory)
   if (!fs.existsSync(storyPath)) {
@@ -28,46 +67,16 @@ export function loadStories(options: DucktoryOptions, nuxt: Nuxt) {
       return
     }
 
-    const name = options.storyComponentPrefix + (++storyIndex)
-    options.debug && ducktoryLog(`Found story: "${file}". Registring as "${name}"`, 'success')
-
-    const filePath = path.join(nuxt.options.rootDir, options.storyDirectory, file)
-    addComponent({
-      name,
-      filePath,
-      global: true,
-    })
-
-    const meta = readStoryMeta(filePath, options)
-    const code = readStoryCode(filePath, options)
-    const originalName = file.replace('.story.vue', '')
-    if (!meta) {
-      stories[originalName] = {
-        id: storyIndex,
-        componentName: name,
-        originalComponentName: originalName,
-        code
-      }
-      return
-    }
-
-    stories[originalName] = {
-      id: storyIndex,
-      componentName: name,
-      originalComponentName: originalName,
-      meta,
-      code
-    }
+    addStory(file, options, nuxt, false);
   })
 
   options.debug && ducktoryLog(`Complete! Found ${Object.keys(stories).length} stories.`, 'success')
   options.debug && console.log('')
+}
 
+async function buildStoryJson(): Promise<string> {
   const json = JSON.stringify(stories, null, 2)
-  addTemplate({
-    filename: 'ducktory-stories.mjs',
-    getContents: () => `export const stories = ${json};`,
-  })
+  return `export const stories = ${json};`
 }
 
 function readStoryMeta(path: string, options: DucktoryOptions): StoryMeta | undefined {
