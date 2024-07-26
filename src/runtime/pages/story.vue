@@ -4,7 +4,6 @@ import { computed, ref, watch } from 'vue'
 import DucktoryActionBtn from '../components/DucktoryActionBtn.vue'
 import DucktoryTabContainer from '../components/DucktoryTabContainer.vue'
 import { useDucktory } from '../composables/useDucktory'
-import { stories as raw } from '#build/ducktory-stories.mjs'
 import { useRoute } from '#app'
 import type { StoryDefinition } from '~/src/types/StoryDefinition'
 
@@ -33,12 +32,11 @@ function copy() {
 </script>
 
 <template>
-  <template v-if="story !== undefined">
+  <template v-if="story">
     <h1
       class="ducktory-text-2xl ducktory-font-semibold"
       v-text="title"
     />
-    {{ raw }}
 
     <DucktoryTabContainer
       class="ducktory-bg-white ducktory-mt-4 ducktory-overflow-hidden ducktory-shadow-md ducktory-rounded-xl ducktory-p4"
@@ -86,7 +84,9 @@ function copy() {
         >
           Docs
         </DucktoryActionBtn>
-        <div class="ducktory-ml-auto ducktory-text-sm ducktory-text-gray-600 ducktory-pr-4">
+        <div
+          class="ducktory-ml-auto ducktory-text-sm ducktory-flex ducktory-items-center ducktory-text-gray-600 ducktory-pr-4"
+        >
           {{ story.originalComponentName }}.story.vue
         </div>
       </template>
