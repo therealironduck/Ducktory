@@ -11,12 +11,11 @@ import type { StoryMeta } from '../types/StoryMeta'
 import type { StoryDefinition } from '../types/StoryDefinition'
 import { ducktoryLog } from './utils'
 
-const stories: { [k: string]: StoryDefinition } = {}
-
+const stories = new Map<string, StoryDefinition>()
 const TEMPLATE_FILE = 'ducktory-stories.mjs'
 
 export async function loadStoryTemplate(options: DucktoryOptions, nuxt: Nuxt) {
-  loadInitialStories(options, nuxt)
+  await loadInitialStories(options, nuxt)
   addTemplate({
     filename: TEMPLATE_FILE,
     getContents: () => buildStoryJson(),
@@ -25,7 +24,7 @@ export async function loadStoryTemplate(options: DucktoryOptions, nuxt: Nuxt) {
 
 export async function addStory(file: string, options: DucktoryOptions, nuxt: Nuxt, updateTemplate: boolean = true) {
   const filePath = path.join(nuxt.options.rootDir, options.storyDirectory, file)
-  const originalName = file.replace('.story.vue', '')
+  const originalName = file.replace(`.${options.storyComponentSuffix}.vue`, '')
 
   const name = options.storyComponentPrefix + originalName.charAt(0).toUpperCase() + originalName.slice(1) + 'Story'
   options.debug && ducktoryLog(`Found story: "${file}". Registring as "${name}"`, 'success')
@@ -33,16 +32,27 @@ export async function addStory(file: string, options: DucktoryOptions, nuxt: Nux
   const meta = readStoryMeta(filePath, options)
   const code = readStoryCode(filePath)
 
-  stories[originalName] = {
+  stories.set(originalName, {
     componentName: name,
     originalComponentName: originalName,
     meta,
     code,
-  }
+  })
 
   if (updateTemplate) {
     await updateTemplates({ filter: t => t.filename === TEMPLATE_FILE })
   }
+}
+
+export async function removeStory(file: string, options: DucktoryOptions) {
+  const originalName = file.replace(`.${options.storyComponentSuffix}.vue`, '')
+  if (!stories.has(originalName)) {
+    return
+  }
+
+  stories.delete(originalName)
+  options.debug && ducktoryLog(`Removed story: "${file}"`, 'success')
+  await updateTemplates({ filter: t => t.filename === TEMPLATE_FILE })
 }
 
 async function loadInitialStories(options: DucktoryOptions, nuxt: Nuxt) {
@@ -54,7 +64,7 @@ async function loadInitialStories(options: DucktoryOptions, nuxt: Nuxt) {
   }
 
   fs.readdirSync(storyPath).forEach((file) => {
-    if (!file.endsWith('.story.vue')) {
+    if (!file.endsWith(`.${options.storyComponentSuffix}.vue`)) {
       options.debug && ducktoryLog(`Skipping: "${file}". Not a story file.`, 'warn')
       return
     }
@@ -62,12 +72,12 @@ async function loadInitialStories(options: DucktoryOptions, nuxt: Nuxt) {
     addStory(file, options, nuxt, false)
   })
 
-  options.debug && ducktoryLog(`Complete! Found ${Object.keys(stories).length} stories.`, 'success')
+  options.debug && ducktoryLog(`Complete! Found ${stories.size} stories.`, 'success')
   options.debug && console.log('')
 }
 
 async function buildStoryJson(): Promise<string> {
-  const json = JSON.stringify(stories, null, 2)
+  const json = JSON.stringify(Object.fromEntries(stories), null, 2)
   return `export const stories = ${json};`
 }
 

@@ -3,10 +3,11 @@ import type { Resolver } from '@nuxt/kit'
 import { addImportsDir, addLayout, addVitePlugin, createResolver, defineNuxtModule, extendPages } from '@nuxt/kit'
 import type { HookResult, Nuxt } from '@nuxt/schema'
 import { ducktoryLog } from './build/utils'
-import { addStory, loadStoryTemplate } from './build/stories'
+import { addStory, loadStoryTemplate, removeStory } from './build/stories'
 import { extendBundler } from './build/bundler'
 
 declare module '#app' {
+  // noinspection JSUnusedGlobalSymbols
   interface NuxtHooks {
     'ducktory:full-reload': () => HookResult
   }
@@ -53,6 +54,7 @@ export interface DucktoryOptions {
   storyComponentSuffix: string
 }
 
+// noinspection JSUnusedGlobalSymbols
 export default defineNuxtModule<DucktoryOptions>({
   meta: {
     name: 'ducktory',
@@ -77,7 +79,7 @@ export default defineNuxtModule<DucktoryOptions>({
     const resolver = createResolver(import.meta.url)
 
     /**
-     * Load all the meta data for existing stories and store them in a template
+     * Load all the metadata for existing stories and store them in a template
      * which can be used to render the stories runtime.
      */
     await loadStoryTemplate(options, nuxt)
@@ -164,7 +166,9 @@ function handleHmr(nuxt: Nuxt, options: DucktoryOptions) {
         break
 
       case 'unlink':
-        // removeStory(path);
+        await removeStory(path.substring(options.storyDirectory.length + 1), options)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        await nuxt.callHook('ducktory:full-reload' as any)
         break
 
       case 'change':

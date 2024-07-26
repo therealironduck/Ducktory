@@ -9,8 +9,6 @@ import { useRoute } from '#app'
 import type { StoryDefinition } from '~/src/types/StoryDefinition'
 
 const { stories, getName } = useDucktory()
-console.log(stories)
-
 const { params } = useRoute()
 
 const story = computed(() => stories[params.story as string] ?? null)

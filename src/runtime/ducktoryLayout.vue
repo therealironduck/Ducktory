@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { useDucktory } from './composables/useDucktory'
+import { useDucktory } from '#imports'
 
 const { stories, getName } = useDucktory()
 </script>
