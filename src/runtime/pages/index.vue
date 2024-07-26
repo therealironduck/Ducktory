@@ -1,11 +1,8 @@
-<script setup lang="ts">
-const { stories } = useDucktory()
+<script lang="ts" setup>
 </script>
 
 <template>
-  <component
-    :is="story.componentName"
-    v-for="story in stories"
-    :key="story.componentName"
-  />
+  <h1 class="ducktory-text-2xl">
+    Ducktory
+  </h1>
 </template>

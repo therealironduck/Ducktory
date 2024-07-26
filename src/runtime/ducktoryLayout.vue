@@ -1,4 +1,6 @@
-<script setup lang="ts">
+<script lang="ts" setup>
+import { useDucktory } from './composables/useDucktory'
+
 const { stories, getName } = useDucktory()
 </script>
 
@@ -20,24 +22,24 @@ const { stories, getName } = useDucktory()
 
         <div class="ducktory-flex ducktory-items-center ducktory-text-gray-600 ducktory-gap-2 ducktory-mt-1">
           <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="18"
-            height="18"
-            fill="none"
-            stroke-width="1.5"
             color="#000"
+            fill="none"
+            height="18"
+            stroke-width="1.5"
             viewBox="0 0 24 24"
+            width="18"
+            xmlns="http://www.w3.org/2000/svg"
           >
             <path
+              d="M5 19.5V5a2 2 0 0 1 2-2h11.4a.6.6 0 0 1 .6.6V21M9 7h6M6.5 15H19M6.5 18H19M6.5 21H19"
               stroke="#000"
               stroke-linecap="round"
-              d="M5 19.5V5a2 2 0 0 1 2-2h11.4a.6.6 0 0 1 .6.6V21M9 7h6M6.5 15H19M6.5 18H19M6.5 21H19"
             />
             <path
+              d="M6.5 18c-1 0-1.5-.672-1.5-1.5S5.5 15 6.5 15M6.5 21c-1 0-1.5-.672-1.5-1.5S5.5 18 6.5 18"
               stroke="#000"
               stroke-linecap="round"
               stroke-linejoin="round"
-              d="M6.5 18c-1 0-1.5-.672-1.5-1.5S5.5 15 6.5 15M6.5 21c-1 0-1.5-.672-1.5-1.5S5.5 18 6.5 18"
             />
           </svg>
           <span class="ducktory-text-sm">Found {{ Object.keys(stories).length }} stories</span>
@@ -47,10 +49,10 @@ const { stories, getName } = useDucktory()
       <section class="ducktory-mt-2">
         <NuxtLink
           v-for="story in stories"
-          :key="'story_nav_' + story.id"
+          :key="'story_nav_' + story.componentName"
           :to="{ name: 'ducktory-story', params: { story: story.originalComponentName } }"
-          class="ducktory-px-4 ducktory-py-3 hover:ducktory-bg-gray-300 ducktory-block"
           active-class="ducktory-bg-gray-300"
+          class="ducktory-px-4 ducktory-py-3 hover:ducktory-bg-gray-300 ducktory-block"
         >
           {{ getName(story) }}
         </NuxtLink>
@@ -64,7 +66,10 @@ const { stories, getName } = useDucktory()
         >jkniest</a>
       </footer>
     </aside>
-    <main class="ducktory-bg-gray-100 ducktory-flex-1 ducktory-p-8" style="max-width: calc(100vw - 20rem)">
+    <main
+      class="ducktory-bg-gray-100 ducktory-flex-1 ducktory-p-8"
+      style="max-width: calc(100vw - 20rem)"
+    >
       <NuxtPage />
     </main>
   </div>
