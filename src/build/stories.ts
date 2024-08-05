@@ -69,6 +69,8 @@ export async function updateStory(file: string, options: DucktoryOptions, nuxt: 
     return
   }
 
+  options.debug && ducktoryLog(`Updated story meta: "${file}"`, 'success')
+
   story.meta = meta
   await updateTemplates({ filter: t => t.filename === TEMPLATE_FILE })
 }

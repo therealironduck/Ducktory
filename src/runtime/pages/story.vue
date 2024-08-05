@@ -4,14 +4,17 @@ import { computed, ref, watch } from 'vue'
 import DucktoryActionBtn from '../components/DucktoryActionBtn.vue'
 import DucktoryTabContainer from '../components/DucktoryTabContainer.vue'
 import { useDucktory } from '../composables/useDucktory'
-import { useRoute } from '#app'
+import { useRoute, useRouter } from '#app'
 import type { StoryDefinition } from '~/src/types/StoryDefinition'
 
 const { stories, getName } = useDucktory()
-const { params } = useRoute()
+const { params, query, path } = useRoute()
+const { push } = useRouter()
 
 const story = computed(() => stories[params.story as string] ?? null)
 const title = computed(() => story.value ? getName(story.value) : '')
+
+const defaultTab = computed(() => query.tab as string || 'preview')
 
 const codeHighlight = ref('Loading...')
 const justCopied = ref(false)
@@ -29,6 +32,10 @@ function copy() {
     justCopied.value = false
   }, 1500)
 }
+
+function selectTab(newTab: string) {
+  push({ path, query: { tab: newTab } })
+}
 </script>
 
 <template>
@@ -39,10 +46,11 @@ function copy() {
     />
 
     <DucktoryTabContainer
+      :default="defaultTab"
       class="ducktory-bg-white ducktory-mt-4 ducktory-overflow-hidden ducktory-shadow-md ducktory-rounded-xl ducktory-p4"
       content-classes="ducktory-p-4"
-      default="preview"
       tab-classes="ducktory-flex ducktory-border-t ducktory-border-t-gray-200"
+      @select="selectTab"
     >
       <template #tab-preview>
         <component :is="story.componentName" />

@@ -10,10 +10,15 @@ const props = withDefaults(defineProps<{
   contentClasses: '',
 })
 
+const emit = defineEmits<{
+  select: [tab: string]
+}>()
+
 const tab = ref(props.default)
 
 function select(newTab: string) {
   tab.value = newTab
+  emit('select', newTab)
 }
 </script>
 
