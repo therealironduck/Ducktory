@@ -3,7 +3,7 @@ import type { Resolver } from '@nuxt/kit'
 import { addImportsDir, addLayout, addVitePlugin, createResolver, defineNuxtModule, extendPages } from '@nuxt/kit'
 import type { HookResult, Nuxt } from '@nuxt/schema'
 import { ducktoryLog } from './build/utils'
-import { addStory, loadStoryTemplate, removeStory } from './build/stories'
+import { addStory, loadStoryTemplate, removeStory, updateStory } from './build/stories'
 import { extendBundler } from './build/bundler'
 
 declare module '#app' {
@@ -172,7 +172,9 @@ function handleHmr(nuxt: Nuxt, options: DucktoryOptions) {
         break
 
       case 'change':
-        // updateStory(path);
+        await updateStory(path.substring(options.storyDirectory.length + 1), options, nuxt)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        await nuxt.callHook('ducktory:full-reload' as any)
         break
     }
   })
