@@ -1,5 +1,5 @@
-<script setup lang="ts">
-import DucktionActionBtn from '../../src/runtime/components/DucktoryActionBtn'
+<script lang="ts" setup>
+import DucktionActionBtn from '../../src/runtime/components/DucktoryActionBtn.vue'
 
 defineStory({
   name: 'Action Button',
