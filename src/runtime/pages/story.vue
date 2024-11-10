@@ -4,7 +4,7 @@ import { computed, ref, watch } from 'vue'
 import DucktoryActionBtn from '../components/DucktoryActionBtn.vue'
 import DucktoryTabContainer from '../components/DucktoryTabContainer.vue'
 import { useDucktory } from '../composables/useDucktory'
-import { useRoute, useRouter } from '#app'
+import { useHead, useRoute, useRouter } from '#app'
 import type { StoryDefinition } from '~/src/types/StoryDefinition'
 
 const { stories, getName } = useDucktory()
@@ -13,11 +13,16 @@ const { push } = useRouter()
 
 const story = computed(() => stories[params.story as string] ?? null)
 const title = computed(() => story.value ? getName(story.value) : '')
+const pageTitle = computed(() => `Ducktory - ${title.value || 'Not Found'}`)
 
 const defaultTab = computed(() => query.tab as string || 'preview')
 
 const codeHighlight = ref('Loading...')
 const justCopied = ref(false)
+
+useHead({
+  title: pageTitle,
+})
 
 watch(story, async (newStory: StoryDefinition | null) => {
   if (!newStory) return
