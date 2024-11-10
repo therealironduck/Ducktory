@@ -65,12 +65,15 @@ export async function updateStory(file: string, options: DucktoryOptions, nuxt: 
     return false
   }
 
-  if (JSON.stringify(meta) === JSON.stringify(story.meta)) {
+  const code = readStoryCode(filePath)
+
+  if (JSON.stringify(meta) === JSON.stringify(story.meta) && code === story.code) {
     return
   }
 
-  options.debug && ducktoryLog(`Updated story meta: "${file}"`, 'success')
+  options.debug && ducktoryLog(`Updated story meta/code: "${file}"`, 'success')
 
+  story.code = code
   story.meta = meta
   await updateTemplates({ filter: t => t.filename === TEMPLATE_FILE })
 }
