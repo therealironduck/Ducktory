@@ -20,6 +20,8 @@ const defaultTab = computed(() => query.tab as string || 'preview')
 const codeHighlight = ref('Loading...')
 const justCopied = ref(false)
 
+const documentation = computed(() => story.value?.meta?.documentation ?? undefined)
+
 useHead({
   title: pageTitle,
 })
@@ -75,7 +77,7 @@ function selectTab(newTab: string) {
         </div>
       </template>
       <template #tab-docs>
-        docs
+        <div v-html="documentation" />
       </template>
 
       <template #tabs="{ select, active }">
@@ -92,10 +94,11 @@ function selectTab(newTab: string) {
           Code
         </DucktoryActionBtn>
         <DucktoryActionBtn
+          v-if="documentation"
           :active="active === 'docs'"
           @click="select('docs')"
         >
-          Docs
+          Documentation
         </DucktoryActionBtn>
         <div
           class="ducktory-ml-auto ducktory-text-sm ducktory-flex ducktory-items-center ducktory-text-gray-600 ducktory-pr-4"

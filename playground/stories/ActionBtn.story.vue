@@ -3,6 +3,7 @@ import DucktionActionBtn from '../../src/runtime/components/DucktoryActionBtn.vu
 
 defineStory({
   name: 'Action Button',
+  documentation: 'This a simple documentation which is defined within `defineStory`.',
 })
 </script>
 
