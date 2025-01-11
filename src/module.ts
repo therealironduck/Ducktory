@@ -1,6 +1,6 @@
 import path from 'node:path'
 import type { Resolver } from '@nuxt/kit'
-import { addImportsDir, addLayout, addTypeTemplate, addVitePlugin, createResolver, defineNuxtModule } from '@nuxt/kit'
+import { addComponent, addImportsDir, addLayout, addTypeTemplate, addVitePlugin, createResolver, defineNuxtModule } from '@nuxt/kit'
 import type { HookResult, Nuxt } from '@nuxt/schema'
 import { ducktoryLog } from './build/utils'
 import { addStory, loadStoryTemplate, removeStory, updateStory } from './build/stories'
@@ -100,8 +100,10 @@ export default defineNuxtModule<DucktoryOptions>({
      * Autoload the stories directory as a global component directory.
      * This will make all story components available globally.
      * Also, the stories will be prefixed with the `storyComponentPrefix` option.
+     *
+     * Additionally it will register global components which can be used in stories.
      */
-    extendComponents(nuxt, options)
+    extendComponents(nuxt, options, resolver)
 
     /**
      * Add the tailwind and font css to the nuxt options, so they are included in the build.
@@ -146,13 +148,18 @@ function registerPages(resolver: Resolver, options: DucktoryOptions, nuxt: Nuxt)
   })
 }
 
-function extendComponents(nuxt: Nuxt, options: DucktoryOptions) {
+function extendComponents(nuxt: Nuxt, options: DucktoryOptions, resolver: Resolver) {
   nuxt.hook('components:dirs', (dirs) => {
     dirs.push({
       path: path.join(nuxt.options.rootDir, options.storyDirectory),
       prefix: options.storyComponentPrefix,
       extensions: [`${options.storyComponentSuffix}.vue`],
       global: true,
+    })
+
+    addComponent({
+      name: 'DucktoryDocumentation',
+      filePath: resolver.resolve('runtime/components/DucktoryDocumentation.vue'),
     })
   })
 }

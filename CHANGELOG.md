@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Added ability to set a documentation for stories
   - This can be set with the `documentation` property in `defineStory`
+  - Alternatively, you can use the `DucktoryDocumentation` component to render documentation
 
 ## [0.0.2] - 2025-01-11
 ### Fixed

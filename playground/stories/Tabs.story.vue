@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import DucktoryTabContainer from '../../src/runtime/components/DucktoryTabContainer.vue'
+import DucktoryActionBtn from '../../src/runtime/components/DucktoryActionBtn.vue'
 
 defineStory({
   name: 'Tabs',
@@ -7,8 +8,20 @@ defineStory({
 </script>
 
 <template>
+  <DucktoryDocumentation>
+    <h1>This is a documentation for the tabs story.</h1>
+    <p>This is a paragraph.</p>
+    <hr>
+    <p>As you can see, you can use html in the documentation.</p>
+    <hr>
+    <p>And even use components and composables.</p>
+    <hr>
+    <DucktoryActionBtn>This is a button</DucktoryActionBtn>
+  </DucktoryDocumentation>
+
   <DucktoryTabContainer
     class="ducktory-bg-gray-300 ducktory-p-4"
+    :tabs="['example1', 'example2', 'example3']"
     content-classes="ducktory-text-amber-700"
     default="example1"
     tab-classes="ducktory-flex ducktory-mt-4 ducktory-bg-white ducktory-gap-2"
