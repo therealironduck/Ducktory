@@ -8,9 +8,21 @@ export function useDucktory() {
     return story.meta?.name || splitPascalCase(story.originalComponentName)
   }
 
+  const getPath = (routeName: string, params: Record<string, string> = {}) => {
+    const routeDefinition = { name: routeName, params }
+
+    if (typeof useLocalePath === 'function') {
+      const localePath = useLocalePath()
+      return localePath(routeDefinition)
+    }
+
+    return routeDefinition
+  }
+
   return {
     stories,
     getName,
+    getPath,
   }
 }
 

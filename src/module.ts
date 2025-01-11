@@ -1,6 +1,6 @@
 import path from 'node:path'
 import type { Resolver } from '@nuxt/kit'
-import { addImportsDir, addLayout, addVitePlugin, createResolver, defineNuxtModule, extendPages } from '@nuxt/kit'
+import { addImportsDir, addLayout, addTypeTemplate, addVitePlugin, createResolver, defineNuxtModule } from '@nuxt/kit'
 import type { HookResult, Nuxt } from '@nuxt/schema'
 import { ducktoryLog } from './build/utils'
 import { addStory, loadStoryTemplate, removeStory, updateStory } from './build/stories'
@@ -70,7 +70,7 @@ export default defineNuxtModule<DucktoryOptions>({
     storyComponentSuffix: 'story',
   },
 
-  async setup(options, nuxt) {
+  async setup(options: DucktoryOptions, nuxt: Nuxt) {
     if (!options.enabled) {
       return
     }
@@ -94,7 +94,7 @@ export default defineNuxtModule<DucktoryOptions>({
      * Register the ducktory home page and story subpage. Also register the layout
      * both pages use.
      */
-    registerPages(resolver, options)
+    registerPages(resolver, options, nuxt)
 
     /**
      * Autoload the stories directory as a global component directory.
@@ -118,20 +118,35 @@ export default defineNuxtModule<DucktoryOptions>({
      * will be reloaded and the browser will be notified to reload the page.
      */
     handleHmr(nuxt, options)
+
+    /**
+     * Register custom types for nuxt. This is needed to make the `useLocalePath` composable not
+     * throw an error if NuxtI18n is not installed.
+     */
+    addTypeTemplate({
+      filename: 'ducktory-types.d.ts',
+      getContents: () => `
+        declare global {
+          function useLocalePath(): (args: { name: string, params: Record<string, string> }) => any | undefined;
+        }
+
+        export {}
+      `,
+    })
   },
 })
 
-function registerPages(resolver: Resolver, options: DucktoryOptions) {
+function registerPages(resolver: Resolver, options: DucktoryOptions, nuxt: Nuxt) {
   addLayout(resolver.resolve('runtime/ducktoryLayout.vue'), 'ducktory')
-  extendPages((pages) => {
-    pages.unshift({
+  nuxt.hook('pages:extend', (pages) => {
+    pages.push({
       name: 'ducktory',
       path: options.path,
       file: resolver.resolve('runtime/pages/index.vue'),
       meta: { layout: 'ducktory' },
     })
 
-    pages.unshift({
+    pages.push({
       name: 'ducktory-story',
       path: path.join(options.path, '/:story'),
       file: resolver.resolve('runtime/pages/story.vue'),

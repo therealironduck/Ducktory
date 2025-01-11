@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { useDucktory } from '#imports'
 
-const { stories, getName } = useDucktory()
+const { stories, getName, getPath } = useDucktory()
 </script>
 
 <template>
@@ -12,7 +12,7 @@ const { stories, getName } = useDucktory()
       <header class="ducktory-py-4 ducktory-mx-4 ducktory-border-b ducktory-border-b-gray-300">
         <div class="ducktory-flex ducktory-items-center ducktory-gap-3">
           <NuxtLink
-            :to="{ name: 'ducktory' }"
+            :to="getPath('ducktory')"
             class="ducktory-text-2xl ducktory-font-bold ducktory-text-amber-700"
           >
             Ducktory
@@ -50,7 +50,7 @@ const { stories, getName } = useDucktory()
         <NuxtLink
           v-for="story in stories"
           :key="'story_nav_' + story.componentName"
-          :to="{ name: 'ducktory-story', params: { story: story.originalComponentName } }"
+          :to="getPath('ducktory-story', { story: story.originalComponentName })"
           active-class="ducktory-bg-gray-300"
           class="ducktory-px-4 ducktory-py-3 hover:ducktory-bg-gray-300 ducktory-block"
         >
