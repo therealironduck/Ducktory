@@ -123,16 +123,7 @@ export default defineNuxtModule<DucktoryOptions>({
      * Register custom types for nuxt. This is needed to make the `useLocalePath` composable not
      * throw an error if NuxtI18n is not installed.
      */
-    addTypeTemplate({
-      filename: 'ducktory-types.d.ts',
-      getContents: () => `
-        declare global {
-          function useLocalePath(): (args: { name: string, params: Record<string, string> }) => any | undefined;
-        }
-
-        export {}
-      `,
-    })
+    registerCustomTypes()
   },
 })
 
@@ -207,5 +198,18 @@ function handleHmr(nuxt: Nuxt, options: DucktoryOptions) {
         })
       })
     },
+  })
+}
+
+function registerCustomTypes() {
+  addTypeTemplate({
+    filename: 'ducktory-types.d.ts',
+    getContents: () => `
+        declare global {
+          function useLocalePath(): (args: { name: string, params: Record<string, string> }) => any | undefined;
+        }
+
+        export {}
+      `,
   })
 }
