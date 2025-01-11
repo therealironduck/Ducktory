@@ -1,11 +1,12 @@
 <script lang="ts" setup>
 import { codeToHtml } from 'shiki'
-import { computed, ref, watch } from 'vue'
+import { provide, computed, ref, watch } from 'vue'
 import DucktoryActionBtn from '../components/DucktoryActionBtn.vue'
 import DucktoryTabContainer from '../components/DucktoryTabContainer.vue'
 import { useDucktory } from '../composables/useDucktory'
-import { useRoute, useRouter } from '#app'
+import { useHead, useRoute, useRouter } from '#app'
 import type { StoryDefinition } from '~/src/types/StoryDefinition'
+import type { CustomVNode } from '~/src/types/VNodeMagic'
 
 const { stories, getName } = useDucktory()
 const { params, query, path } = useRoute()
@@ -13,11 +14,22 @@ const { push } = useRouter()
 
 const story = computed(() => stories[params.story as string] ?? null)
 const title = computed(() => story.value ? getName(story.value) : '')
+const pageTitle = computed(() => `Ducktory - ${title.value || 'Not Found'}`)
+const componentDocumentation = ref<CustomVNode[] | undefined>(undefined)
+
+provide('ducktory-documentation', componentDocumentation)
 
 const defaultTab = computed(() => query.tab as string || 'preview')
 
 const codeHighlight = ref('Loading...')
 const justCopied = ref(false)
+
+const hasDocumentation = computed(() => story.value?.meta?.documentation !== undefined || componentDocumentation.value?.length > 0)
+const documentation = computed(() => story.value?.meta?.documentation ?? undefined)
+
+useHead({
+  title: pageTitle,
+})
 
 watch(story, async (newStory: StoryDefinition | null) => {
   if (!newStory) return
@@ -47,13 +59,17 @@ function selectTab(newTab: string) {
 
     <DucktoryTabContainer
       :default="defaultTab"
+      :tabs="['preview', 'code', 'docs']"
       class="ducktory-bg-white ducktory-mt-4 ducktory-overflow-hidden ducktory-shadow-md ducktory-rounded-xl ducktory-p4"
       content-classes="ducktory-p-4"
       tab-classes="ducktory-flex ducktory-border-t ducktory-border-t-gray-200"
       @select="selectTab"
     >
       <template #tab-preview>
-        <component :is="story.componentName" />
+        <component
+          :is="story.componentName"
+          ref="preview"
+        />
       </template>
       <template #tab-code>
         <div
@@ -70,7 +86,19 @@ function selectTab(newTab: string) {
         </div>
       </template>
       <template #tab-docs>
-        docs
+        <ClientOnly>
+          <template v-if="componentDocumentation?.length > 0">
+            <component
+              :is="(node)"
+              v-for="(node, idx) in componentDocumentation"
+              :key="idx"
+            />
+          </template>
+          <div
+            v-else
+            v-html="documentation"
+          />
+        </ClientOnly>
       </template>
 
       <template #tabs="{ select, active }">
@@ -87,10 +115,11 @@ function selectTab(newTab: string) {
           Code
         </DucktoryActionBtn>
         <DucktoryActionBtn
+          v-show="hasDocumentation"
           :active="active === 'docs'"
           @click="select('docs')"
         >
-          Docs
+          Documentation
         </DucktoryActionBtn>
         <div
           class="ducktory-ml-auto ducktory-text-sm ducktory-flex ducktory-items-center ducktory-text-gray-600 ducktory-pr-4"
@@ -108,6 +137,8 @@ function selectTab(newTab: string) {
 <style>
 .ducktory-code-wrapper > pre {
   min-width: fit-content;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
   width: 100%;
 }
 </style>
