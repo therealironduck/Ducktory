@@ -137,6 +137,8 @@ function selectTab(newTab: string) {
 <style>
 .ducktory-code-wrapper > pre {
   min-width: fit-content;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
   width: 100%;
 }
 </style>

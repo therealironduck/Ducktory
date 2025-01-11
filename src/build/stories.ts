@@ -147,11 +147,14 @@ function readStoryCode(path: string): string {
     return ''
   }
 
-  // Get content of template tag onn content string without regex and using something smart
+  // Get content of template tag / content string without regex and using something smart
   const { descriptor } = parseSFC(content)
   const { template } = descriptor
 
-  return template?.content ?? ''
+  const innerTemplate = filterOutDucktoryTags(template?.content ?? '')
+
+  // Remove empty lines
+  return innerTemplate.split('\n').filter(line => line.trim().length > 0).join('\n')
 }
 
 function evalValue(value: string): StoryMeta | undefined {
@@ -164,4 +167,10 @@ function evalValue(value: string): StoryMeta | undefined {
     // console.error(formatMessage(`Cannot evaluate value: ${value}`))
     return
   }
+}
+
+function filterOutDucktoryTags(content: string): string {
+  const ducktoryDocumentationRegex = /<ducktory-?documentation[^>]*>[\s\S]*?<\/ducktory-?documentation>/gi
+
+  return content.replace(ducktoryDocumentationRegex, '')
 }

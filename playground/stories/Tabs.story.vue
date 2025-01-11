@@ -14,6 +14,7 @@ defineStory({
     <hr>
     <p>As you can see, you can use html in the documentation.</p>
     <hr>
+    <br>
     <p>And even use components and composables.</p>
     <hr>
     <DucktoryActionBtn>This is a button</DucktoryActionBtn>
