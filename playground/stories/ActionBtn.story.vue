@@ -7,7 +7,5 @@ defineStory({
 </script>
 
 <template>
-  <DucktionActionBtn>
-    My custom action button
-  </DucktionActionBtn>
+  <DucktionActionBtn> My custom action button </DucktionActionBtn>
 </template>
