@@ -4,7 +4,6 @@ export default defineNuxtConfig({
   ducktory: {
     enabled: true,
     debug: true,
-    path: '/ducktory',
   },
   devtools: { enabled: true },
   i18n: {

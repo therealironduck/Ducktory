@@ -62,7 +62,7 @@ export default defineNuxtModule<DucktoryOptions>({
   },
 
   defaults: {
-    path: 'ducktory',
+    path: '/ducktory',
     enabled: true,
     storyComponentPrefix: 'Ducktory',
     debug: false,
@@ -139,7 +139,6 @@ export default defineNuxtModule<DucktoryOptions>({
 function registerPages(resolver: Resolver, options: DucktoryOptions, nuxt: Nuxt) {
   addLayout(resolver.resolve('runtime/ducktoryLayout.vue'), 'ducktory')
   nuxt.hook('pages:extend', (pages) => {
-  // extendPages((pages) => {
     pages.push({
       name: 'ducktory',
       path: options.path,
