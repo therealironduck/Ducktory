@@ -1,0 +1,33 @@
+name: 'Lint'
+on: ['pull_request', 'push']
+
+jobs:
+  eslint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+
+      - run: 'bun install'
+      - run: 'bun run dev:prepare'
+      - run: 'bun run eslint .'
+
+  test-types:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+
+      - run: 'bun install'
+      - run: 'bun run dev:prepare'
+      - run: 'bun run test:types'
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+
+      - run: 'bun install'
+      - run: 'bun run dev:prepare'
+      - run: 'bun run prepack'
