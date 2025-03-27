@@ -53,16 +53,16 @@ function selectTab(newTab: string) {
 <template>
   <template v-if="story">
     <h1
-      class="ducktory-text-2xl ducktory-font-semibold"
+      class="ducktory:text-2xl ducktory:font-semibold"
       v-text="title"
     />
 
     <DucktoryTabContainer
       :default="defaultTab"
       :tabs="['preview', 'code', 'docs']"
-      class="ducktory-bg-white ducktory-mt-4 ducktory-overflow-hidden ducktory-shadow-md ducktory-rounded-xl ducktory-p4"
-      content-classes="ducktory-p-4"
-      tab-classes="ducktory-flex ducktory-border-t ducktory-border-t-gray-200"
+      class="ducktory:bg-white ducktory:mt-4 ducktory:overflow-hidden ducktory:shadow-md ducktory:rounded-xl"
+      content-classes="ducktory:p-4"
+      tab-classes="ducktory:flex ducktory:border-t ducktory:border-t-gray-200"
       @select="selectTab"
     >
       <template #tab-preview>
@@ -73,12 +73,12 @@ function selectTab(newTab: string) {
       </template>
       <template #tab-code>
         <div
-          class="ducktory-overflow-scroll ducktory-min-w-full ducktory-code-wrapper"
+          class="ducktory:overflow-scroll ducktory:min-w-full ducktory-code-wrapper"
           v-html="codeHighlight"
         />
-        <div class="ducktory-flex ducktory-justify-end ducktory-mt-2 ducktory-text-sm">
+        <div class="ducktory:flex ducktory:justify-end ducktory:mt-2 ducktory:text-sm">
           <a
-            class="ducktory-underline ducktory-text-amber-700"
+            class="ducktory:underline ducktory:text-amber-700"
             href="#"
             @click.prevent="copy"
             v-text="justCopied ? 'Copied!' : 'Copy'"
@@ -122,7 +122,7 @@ function selectTab(newTab: string) {
           Documentation
         </DucktoryActionBtn>
         <div
-          class="ducktory-ml-auto ducktory-text-sm ducktory-flex ducktory-items-center ducktory-text-gray-600 ducktory-pr-4"
+          class="ducktory:ml-auto ducktory:text-sm ducktory:flex ducktory:items-center ducktory:text-gray-600 ducktory:pr-4"
         >
           {{ story.originalComponentName }}.story.vue
         </div>

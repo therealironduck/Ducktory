@@ -5,22 +5,22 @@ const { stories, getName, getPath } = useDucktory()
 </script>
 
 <template>
-  <div class="ducktory-flex ducktory-min-h-screen ducktory-font-main">
+  <div class="ducktory:flex ducktory:min-h-screen ducktory:font-main">
     <aside
-      class="ducktory-w-1/3 ducktory-max-w-80 ducktory-bg-gray-200 ducktory-border-r-2 ducktory-border-r-gray-400 ducktory-flex ducktory-flex-col"
+      class="ducktory:w-1/3 ducktory:max-w-80 ducktory:bg-gray-200 ducktory:border-r-2 ducktory:border-r-gray-400 ducktory:flex ducktory:flex-col"
     >
-      <header class="ducktory-py-4 ducktory-mx-4 ducktory-border-b ducktory-border-b-gray-300">
-        <div class="ducktory-flex ducktory-items-center ducktory-gap-3">
+      <header class="ducktory:py-4 ducktory:mx-4 ducktory:border-b ducktory:border-b-gray-300">
+        <div class="ducktory:flex ducktory:items-center ducktory:gap-3">
           <NuxtLink
             :to="getPath('ducktory')"
-            class="ducktory-text-2xl ducktory-font-bold ducktory-text-amber-700"
+            class="ducktory:text-2xl ducktory:font-bold ducktory:text-amber-700"
           >
             Ducktory
           </NuxtLink>
-          <span class="ducktory-text-sm ducktory-font-light ducktory-text-gray-800">v0.1.0</span>
+          <span class="ducktory:text-sm ducktory:font-light ducktory:text-gray-800">v0.1.0</span>
         </div>
 
-        <div class="ducktory-flex ducktory-items-center ducktory-text-gray-600 ducktory-gap-2 ducktory-mt-1">
+        <div class="ducktory:flex ducktory:items-center ducktory:text-gray-600 ducktory:gap-2 ducktory:mt-1">
           <svg
             color="#000"
             fill="none"
@@ -42,32 +42,32 @@ const { stories, getName, getPath } = useDucktory()
               stroke-linejoin="round"
             />
           </svg>
-          <span class="ducktory-text-sm">Found {{ Object.keys(stories).length }} stories</span>
+          <span class="ducktory:text-sm">Found {{ Object.keys(stories).length }} stories</span>
         </div>
       </header>
 
-      <section class="ducktory-mt-2">
+      <section class="ducktory:mt-2">
         <NuxtLink
           v-for="story in stories"
           :key="'story_nav_' + story.componentName"
           :to="getPath('ducktory-story', { story: story.originalComponentName })"
-          active-class="ducktory-bg-gray-300"
-          class="ducktory-px-4 ducktory-py-3 hover:ducktory-bg-gray-300 ducktory-block"
+          active-class="ducktory:bg-gray-300"
+          class="ducktory:px-4 ducktory:py-3 ducktory:hover:bg-gray-300 ducktory:block"
         >
           {{ getName(story) }}
         </NuxtLink>
       </section>
 
-      <footer class="ducktory-mt-auto ducktory-text-gray-400 ducktory-text-xs ducktory-p-2 ducktory-text-center">
+      <footer class="ducktory:mt-auto ducktory:text-gray-400 ducktory:text-xs ducktory:p-2 ducktory:text-center">
         Made with ❤️ by <a
-          class="ducktory-text-gray-600"
+          class="ducktory:text-gray-600"
           href="https://github.com/jkniest"
           target="_blank"
         >jkniest</a>
       </footer>
     </aside>
     <main
-      class="ducktory-bg-gray-100 ducktory-flex-1 ducktory-p-8"
+      class="ducktory:bg-gray-100 ducktory:flex-1 ducktory:p-8"
       style="max-width: calc(100vw - 20rem)"
     >
       <NuxtPage />

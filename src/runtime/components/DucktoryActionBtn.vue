@@ -6,8 +6,8 @@ withDefaults(defineProps<{ active?: boolean }>(), {
 
 <template>
   <div
-    class="hover:ducktory-bg-gray-200 ducktory-cursor-pointer ducktory-px-4 ducktory-py-2"
-    :class="{ 'ducktory-bg-gray-200': active }"
+    class="ducktory:hover:bg-gray-200 ducktory:cursor-pointer ducktory:px-4 ducktory:py-2"
+    :class="{ 'ducktory:bg-gray-200': active }"
   >
     <slot />
   </div>

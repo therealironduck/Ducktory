@@ -28,8 +28,8 @@
     "dev:prepare": "nuxt-module-build build --stub && nuxt-module-build prepare && nuxi prepare playground",
     "lint": "eslint . --fix",
     "test:types": "vue-tsc --noEmit && cd playground && vue-tsc --noEmit",
-    "tailwind": "bunx tailwindcss -o src/runtime/assets/tailwind.css",
-    "tailwind:watch": "bunx tailwindcss -o src/runtime/assets/tailwind.css --watch"
+    "tailwind": "bunx @tailwindcss/cli -i tailwind.css -o src/runtime/assets/tailwind.css",
+    "tailwind:watch": "bunx @tailwindcss/cli -i tailwind.css -o src/runtime/assets/tailwind.css --watch"
   },
   "dependencies": {
     "@nuxt/kit": "^3.12.2",
@@ -48,6 +48,7 @@
     "@types/node": "^20.14.2",
     "eslint": "^9.5.0",
     "nuxt": "^3.12.2",
+    "tailwindcss": "^4.0.17",
     "typescript": "latest",
     "vue-tsc": "^2.0.21"
   }
