@@ -24,7 +24,7 @@ function select(newTab: string) {
 </script>
 
 <template>
-  <div class="ducktory-tab-container">
+  <div class="ducktory:tab-container">
     <div :class="contentClasses">
       <template
         v-for="tab in tabs"
