@@ -60,7 +60,7 @@ function selectTab(newTab: string) {
     <DucktoryTabContainer
       :default="defaultTab"
       :tabs="['preview', 'code', 'docs']"
-      class="ducktory:bg-white ducktory:mt-4 ducktory:overflow-hidden ducktory:shadow-md ducktory:rounded-xl ducktory:p-4"
+      class="ducktory:bg-white ducktory:mt-4 ducktory:overflow-hidden ducktory:shadow-md ducktory:rounded-xl"
       content-classes="ducktory:p-4"
       tab-classes="ducktory:flex ducktory:border-t ducktory:border-t-gray-200"
       @select="selectTab"
