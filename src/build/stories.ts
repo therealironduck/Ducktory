@@ -27,8 +27,7 @@ export async function addStory(file: string, options: DucktoryOptions, nuxt: Nux
   const originalName = file.replace(`.${options.storyComponentSuffix}.vue`, '')
 
   const name = options.storyComponentPrefix + originalName.charAt(0).toUpperCase() + originalName.slice(1) + 'Story'
-  logger.debug(`Found story: "${file}". Registring as "${name}"`)
-
+  logger.debug(`Found story: "${file}". Registering as "${name}"`)
   const meta = readStoryMeta(filePath, logger)
   const code = readStoryCode(filePath)
 
