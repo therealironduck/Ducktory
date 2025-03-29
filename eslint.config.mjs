@@ -20,6 +20,7 @@ export default createConfigForNuxt({
       rules: {
         'vue/multi-word-component-names': 'off',
         'vue/no-v-html': 'off',
+        '@typescript-eslint/ban-ts-comment': 'off',
       },
     },
   )

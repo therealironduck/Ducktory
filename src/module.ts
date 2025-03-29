@@ -1,8 +1,8 @@
 import path from 'node:path'
 import type { Resolver } from '@nuxt/kit'
-import { addComponent, addImportsDir, addLayout, addTypeTemplate, addVitePlugin, createResolver, defineNuxtModule } from '@nuxt/kit'
+import { addComponent, addImportsDir, addLayout, addTypeTemplate, addVitePlugin, createResolver, defineNuxtModule, useLogger } from '@nuxt/kit'
 import type { HookResult, Nuxt } from '@nuxt/schema'
-import { ducktoryLog } from './build/utils'
+import type * as consola from 'consola'
 import { addStory, loadStoryTemplate, removeStory, updateStory } from './build/stories'
 import { extendBundler } from './build/bundler'
 
@@ -75,14 +75,16 @@ export default defineNuxtModule<DucktoryOptions>({
       return
     }
 
-    ducktoryLog('Ready!')
+    const logger = useLogger('Ducktory', { level: options.debug ? 4 : 3 })
+
+    logger.info('Ducktory Ready!')
     const resolver = createResolver(import.meta.url)
 
     /**
      * Load all the metadata for existing stories and store them in a template
      * which can be used to render the stories runtime.
      */
-    await loadStoryTemplate(options, nuxt)
+    await loadStoryTemplate(options, nuxt, logger)
 
     /**
      * Extend the vite bundler to remove the `defineStoryMeta` composable from the final
@@ -119,7 +121,7 @@ export default defineNuxtModule<DucktoryOptions>({
      * Handle hot module reloading for story files. When a story file changes, the stories
      * will be reloaded and the browser will be notified to reload the page.
      */
-    handleHmr(nuxt, options)
+    handleHmr(nuxt, options, logger)
 
     /**
      * Register custom types for nuxt. This is needed to make the `useLocalePath` composable not
@@ -164,28 +166,28 @@ function extendComponents(nuxt: Nuxt, options: DucktoryOptions, resolver: Resolv
   })
 }
 
-function handleHmr(nuxt: Nuxt, options: DucktoryOptions) {
+function handleHmr(nuxt: Nuxt, options: DucktoryOptions, logger: consola.ConsolaInstance) {
   nuxt.hook('builder:watch', async (event, path) => {
     if (!path.includes(options.storyDirectory) || !path.endsWith(`.${options.storyComponentSuffix}.vue`)) {
       return
     }
 
-    options.debug && ducktoryLog('Story file changed. Reloading stories...')
+    logger.debug('Story file changed. Reloading stories...')
     switch (event) {
       case 'add':
-        await addStory(path.substring(options.storyDirectory.length + 1), options, nuxt)
+        await addStory(path.substring(options.storyDirectory.length + 1), options, nuxt, logger)
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         await nuxt.callHook('ducktory:full-reload' as any)
         break
 
       case 'unlink':
-        await removeStory(path.substring(options.storyDirectory.length + 1), options)
+        await removeStory(path.substring(options.storyDirectory.length + 1), options, logger)
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         await nuxt.callHook('ducktory:full-reload' as any)
         break
 
       case 'change':
-        await updateStory(path.substring(options.storyDirectory.length + 1), options, nuxt)
+        await updateStory(path.substring(options.storyDirectory.length + 1), options, nuxt, logger)
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         await nuxt.callHook('ducktory:full-reload' as any)
         break
