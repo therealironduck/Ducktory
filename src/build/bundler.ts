@@ -7,5 +7,6 @@ export function extendBundler(nuxt: Nuxt) {
     sourcemap: !!nuxt.options.sourcemap.server || !!nuxt.options.sourcemap.client,
   }
 
+  // @ts-ignore
   addVitePlugin(TransformMacroPlugin.vite(macroOptions))
 }

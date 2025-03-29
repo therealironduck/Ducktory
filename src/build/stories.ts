@@ -6,30 +6,30 @@ import { compileScript, parse as parseSFC } from '@vue/compiler-sfc'
 import MagicString from 'magic-string'
 import { walk } from 'estree-walker'
 import type { Node } from '@babel/types'
+import type * as consola from 'consola'
 import type { DucktoryOptions } from '../module'
 import type { StoryMeta } from '../types/StoryMeta'
 import type { StoryDefinition } from '../types/StoryDefinition'
-import { ducktoryLog } from './utils'
 
 const stories = new Map<string, StoryDefinition>()
 const TEMPLATE_FILE = 'ducktory-stories.mjs'
 
-export async function loadStoryTemplate(options: DucktoryOptions, nuxt: Nuxt) {
-  await loadInitialStories(options, nuxt)
+export async function loadStoryTemplate(options: DucktoryOptions, nuxt: Nuxt, logger: consola.ConsolaInstance) {
+  await loadInitialStories(options, nuxt, logger)
   addTemplate({
     filename: TEMPLATE_FILE,
     getContents: () => buildStoryJson(),
   })
 }
 
-export async function addStory(file: string, options: DucktoryOptions, nuxt: Nuxt, updateTemplate: boolean = true) {
+export async function addStory(file: string, options: DucktoryOptions, nuxt: Nuxt, logger: consola.ConsolaInstance, updateTemplate: boolean = true) {
   const filePath = path.join(nuxt.options.rootDir, options.storyDirectory, file)
   const originalName = file.replace(`.${options.storyComponentSuffix}.vue`, '')
 
   const name = options.storyComponentPrefix + originalName.charAt(0).toUpperCase() + originalName.slice(1) + 'Story'
-  options.debug && ducktoryLog(`Found story: "${file}". Registring as "${name}"`, 'success')
+  logger.debug(`Found story: "${file}". Registring as "${name}"`)
 
-  const meta = readStoryMeta(filePath, options)
+  const meta = readStoryMeta(filePath, logger)
   const code = readStoryCode(filePath)
 
   stories.set(originalName, {
@@ -44,21 +44,21 @@ export async function addStory(file: string, options: DucktoryOptions, nuxt: Nux
   }
 }
 
-export async function removeStory(file: string, options: DucktoryOptions) {
+export async function removeStory(file: string, options: DucktoryOptions, logger: consola.ConsolaInstance) {
   const originalName = file.replace(`.${options.storyComponentSuffix}.vue`, '')
   if (!stories.has(originalName)) {
     return
   }
 
   stories.delete(originalName)
-  options.debug && ducktoryLog(`Removed story: "${file}"`, 'success')
+  logger.debug(`Removed story: "${file}"`)
   await updateTemplates({ filter: t => t.filename === TEMPLATE_FILE })
 }
 
-export async function updateStory(file: string, options: DucktoryOptions, nuxt: Nuxt) {
+export async function updateStory(file: string, options: DucktoryOptions, nuxt: Nuxt, logger: consola.ConsolaInstance) {
   const filePath = path.join(nuxt.options.rootDir, options.storyDirectory, file)
   const originalName = file.replace(`.${options.storyComponentSuffix}.vue`, '')
-  const meta = readStoryMeta(filePath, options)
+  const meta = readStoryMeta(filePath, logger)
   const story = stories.get(originalName)
 
   if (!story || !meta) {
@@ -71,32 +71,32 @@ export async function updateStory(file: string, options: DucktoryOptions, nuxt: 
     return
   }
 
-  options.debug && ducktoryLog(`Updated story meta/code: "${file}"`, 'success')
+  logger.debug(`Updated story meta/code: "${file}"`)
 
   story.code = code
   story.meta = meta
   await updateTemplates({ filter: t => t.filename === TEMPLATE_FILE })
 }
 
-async function loadInitialStories(options: DucktoryOptions, nuxt: Nuxt) {
-  options.debug && ducktoryLog('Loading stories...')
+async function loadInitialStories(options: DucktoryOptions, nuxt: Nuxt, logger: consola.ConsolaInstance) {
+  logger.debug('Loading stories...')
   const storyPath = path.join(nuxt.options.rootDir, options.storyDirectory)
   if (!fs.existsSync(storyPath)) {
-    options.debug && ducktoryLog(`Configured stories path missing: "${storyPath}".`, 'warn')
+    logger.debug(`Configured stories path missing: "${storyPath}".`)
     return
   }
 
   fs.readdirSync(storyPath).forEach((file) => {
     if (!file.endsWith(`.${options.storyComponentSuffix}.vue`)) {
-      options.debug && ducktoryLog(`Skipping: "${file}". Not a story file.`, 'warn')
+      logger.debug(`Skipping: "${file}". Not a story file.`)
       return
     }
 
-    addStory(file, options, nuxt, false)
+    addStory(file, options, nuxt, logger, false)
   })
 
-  options.debug && ducktoryLog(`Complete! Found ${stories.size} stories.`, 'success')
-  options.debug && console.log('')
+  logger.debug(`Complete! Found ${stories.size} stories.`)
+  logger.debug('')
 }
 
 async function buildStoryJson(): Promise<string> {
@@ -104,13 +104,13 @@ async function buildStoryJson(): Promise<string> {
   return `export const stories = ${json};`
 }
 
-function readStoryMeta(path: string, options: DucktoryOptions): StoryMeta | undefined {
+function readStoryMeta(path: string, logger: consola.ConsolaInstance): StoryMeta | undefined {
   const content = readFileSync(path).toString()
   if (!content.includes('defineStory')) {
     return
   }
 
-  options.debug && ducktoryLog(`Reading story meta from: "${path}"`, 'info')
+  logger.debug(`Reading story meta from: "${path}"`)
 
   const { descriptor } = parseSFC(content)
   const desc = compileScript(descriptor, { id: path })
@@ -162,7 +162,7 @@ function evalValue(value: string): StoryMeta | undefined {
     // TODO as any
     return new Function(`return (${value})`)() as StoryMeta
   }
-  catch (_e) {
+  catch {
     // Todo propper error
     // console.error(formatMessage(`Cannot evaluate value: ${value}`))
     return
