@@ -1,7 +1,9 @@
 import type { StoryDefinition } from '../../types/StoryDefinition'
 import { stories as raw } from '#build/ducktory-stories.mjs'
+import { useNuxtApp } from '#app'
 
 export function useDucktory() {
+  const app = useNuxtApp()
   const stories = raw as { [k: string]: StoryDefinition }
 
   const getName = (story: StoryDefinition): string => {
@@ -11,9 +13,8 @@ export function useDucktory() {
   const getPath = (routeName: string, params: Record<string, string> = {}) => {
     const routeDefinition = { name: routeName, params }
 
-    if (typeof useLocalePath === 'function') {
-      const localePath = useLocalePath()
-      return localePath(routeDefinition)
+    if (typeof app.$localePath === 'function') {
+      return app.$localePath(routeDefinition)
     }
 
     return routeDefinition
