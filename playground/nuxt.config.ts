@@ -1,7 +1,9 @@
 export default defineNuxtConfig({
-  modules: ['../src/module', '@nuxtjs/i18n'],
+  modules: ['../src/module', '@nuxtjs/i18n', '@nuxt/ui'],
 
   devtools: { enabled: true },
+
+  css: ['~/assets/css/main.css'],
 
   compatibilityDate: '2025-03-29',
 
@@ -28,3 +30,4 @@ export default defineNuxtConfig({
     lazy: true,
   },
 })
+

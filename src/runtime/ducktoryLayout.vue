@@ -5,7 +5,7 @@ const { stories, getName, getPath } = useDucktory()
 </script>
 
 <template>
-  <div class="ducktory:flex ducktory:min-h-screen ducktory:font-main">
+  <div class="ducktory:flex ducktory:min-h-screen ducktory:font-main ducktory:text-black">
     <aside
       class="ducktory:w-1/3 ducktory:max-w-80 ducktory:bg-gray-200 ducktory:border-r-2 ducktory:border-r-gray-400 ducktory:flex ducktory:flex-col"
     >
