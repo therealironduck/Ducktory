@@ -27,7 +27,7 @@
     "dev:build": "bun run tailwind && nuxi build playground",
     "dev:prepare": "nuxt-module-build build --stub && nuxt-module-build prepare && nuxi prepare playground",
     "lint": "eslint . --fix",
-    "test:types": "vue-tsc --noEmit && cd playground && vue-tsc --noEmit",
+    "test:types": "bun run ./scripts/typecheck.ts",
     "tailwind": "bunx @tailwindcss/cli -i tailwind.css -o src/runtime/assets/tailwind.css",
     "tailwind:watch": "bunx @tailwindcss/cli -i tailwind.css -o src/runtime/assets/tailwind.css --watch"
   },
@@ -45,6 +45,7 @@
     "@nuxt/eslint-config": "^1.3.0",
     "@nuxt/module-builder": "^0.8.4",
     "@nuxt/schema": "^3.16.1",
+    "@types/bun": "^1.2.8",
     "@types/node": "^22.13.14",
     "eslint": "^9.23.0",
     "nuxt": "^3.16.1",

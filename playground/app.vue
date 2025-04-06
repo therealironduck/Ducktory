@@ -3,4 +3,3 @@
     <NuxtLayout />
   </UApp>
 </template>
-

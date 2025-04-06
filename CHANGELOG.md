@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.2] - 2025-04-06
 ### Fixed
-- Fixed that all texts are white, if Nuxt UI is installed
+- Fixed an issue where text appeared white when Nuxt UI was installed
 
 ## [0.1.1] - 2025-03-31
 ### Fixed
