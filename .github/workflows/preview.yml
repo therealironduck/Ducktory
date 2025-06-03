@@ -11,4 +11,4 @@ jobs:
       - run: '(cd playground && bun install)'
       - run: 'bun run dev:prepare'
       - run: 'bun run prepack'
-      - run: 'bunx dlx pkg-pr-new publish'
+      - run: 'bunx pkg-pr-new publish'
