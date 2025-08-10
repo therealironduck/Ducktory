@@ -6,15 +6,16 @@ permissions:
   contents: write
 
 jobs:
-  name: Create Github Release
-  runs-on: ubuntu-latest
-  steps:
-    - name: Run ReleaseMe
-      id: release
-      uses: dev-build-deploy/release-me@v0
-      with:
-        token: ${{ github.token }}
+  release-me:
+    name: Create Github Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run ReleaseMe
+        id: release
+        uses: dev-build-deploy/release-me@v0
+        with:
+          token: ${{ github.token }}
 
-    - if: ${{ steps.release.outputs.created }}
-      run: echo ${{ fromJSON(steps.release.outputs.release).tag_name }}
+      - if: ${{ steps.release.outputs.created }}
+        run: echo ${{ fromJSON(steps.release.outputs.release).tag_name }}
 
