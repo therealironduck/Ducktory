@@ -1,52 +1,25 @@
 <script lang="ts" setup>
 import { useDucktory } from '#imports'
 
-const { stories, getName, getPath } = useDucktory()
+const { stories, getName, getPath, version } = useDucktory()
 </script>
 
 <template>
   <div
     id="ducktory"
-    class="ducktory:flex ducktory:min-h-screen ducktory:font-main ducktory:text-black"
+    class="ducktory:flex ducktory:min-h-screen ducktory:font-normal ducktory:text-black"
   >
     <aside
-      class="ducktory:w-1/3 ducktory:max-w-80 ducktory:bg-gray-200 ducktory:border-r-2 ducktory:border-r-gray-400 ducktory:flex ducktory:flex-col"
+      class="ducktory:w-1/3 ducktory:max-w-72 ducktory:bg-secondary ducktory:flex ducktory:flex-col"
     >
-      <header class="ducktory:py-4 ducktory:mx-4 ducktory:border-b ducktory:border-b-gray-300">
-        <div class="ducktory:flex ducktory:items-center ducktory:gap-3">
-          <NuxtLink
-            :to="getPath('ducktory')"
-            class="ducktory:text-2xl ducktory:font-bold ducktory:text-amber-700"
-          >
-            Ducktory
-          </NuxtLink>
-          <span class="ducktory:text-sm ducktory:font-light ducktory:text-gray-800">v0.1.0</span>
-        </div>
-
-        <div class="ducktory:flex ducktory:items-center ducktory:text-gray-600 ducktory:gap-2 ducktory:mt-1">
-          <svg
-            color="#000"
-            fill="none"
-            height="18"
-            stroke-width="1.5"
-            viewBox="0 0 24 24"
-            width="18"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M5 19.5V5a2 2 0 0 1 2-2h11.4a.6.6 0 0 1 .6.6V21M9 7h6M6.5 15H19M6.5 18H19M6.5 21H19"
-              stroke="#000"
-              stroke-linecap="round"
-            />
-            <path
-              d="M6.5 18c-1 0-1.5-.672-1.5-1.5S5.5 15 6.5 15M6.5 21c-1 0-1.5-.672-1.5-1.5S5.5 18 6.5 18"
-              stroke="#000"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
-          <span class="ducktory:text-sm">Found {{ Object.keys(stories).length }} stories</span>
-        </div>
+      <header class="ducktory:py-4 ducktory:px-8 ducktory:border-b ducktory:border-b-primary ducktory:text-center ducktory:-space-y-2">
+        <NuxtLink
+          :to="getPath('ducktory')"
+          class="ducktory:text-2xl ducktory:font-bold ducktory:text-primary block"
+        >
+          Ducktory
+        </NuxtLink>
+        <span class="ducktory:text-xs ducktory:font-light ducktory:text-gray">Version {{ version }}</span>
       </header>
 
       <section class="ducktory:mt-2">

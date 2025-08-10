@@ -1,10 +1,12 @@
 import path from 'node:path'
 import type { Resolver } from '@nuxt/kit'
-import { addComponent, addImportsDir, addLayout, addTypeTemplate, addVitePlugin, createResolver, defineNuxtModule, useLogger } from '@nuxt/kit'
+import { addComponent, addImportsDir, addLayout, addTemplate, addTypeTemplate, addVitePlugin, createResolver, defineNuxtModule, useLogger } from '@nuxt/kit'
 import type { HookResult, Nuxt } from '@nuxt/schema'
 import type * as consola from 'consola'
 import { addStory, loadStoryTemplate, removeStory, updateStory } from './build/stories'
 import { extendBundler } from './build/bundler'
+
+import { readFileSync } from 'node:fs'
 
 declare module '#app' {
   // noinspection JSUnusedGlobalSymbols
@@ -128,6 +130,11 @@ export default defineNuxtModule<DucktoryOptions>({
      * throw an error if NuxtI18n is not installed.
      */
     registerCustomTypes()
+
+    /**
+     * Publish the current package.json version to be used in templates
+     */
+    publishVersion()
   },
 })
 
@@ -219,6 +226,21 @@ function registerCustomTypes() {
         }
 
         export {}
+      `,
+  })
+}
+
+function publishVersion() {
+  const packageJson = JSON.parse(readFileSync(path.resolve(__dirname, '../package.json'), 'utf-8'))
+  const version = packageJson.version
+
+  console.log('VER = ' + version)
+
+  // Add the version to a Nuxt template
+  addTemplate({
+    filename: 'ducktory-version.mjs',
+    getContents: () => `
+        export const ducktoryVersion = '${version}';
       `,
   })
 }

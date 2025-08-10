@@ -148,19 +148,6 @@
   }
 }
 :root, :host {
-  --ducktory-font-sans: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
-    'Noto Color Emoji';
-  --ducktory-font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New',
-    monospace;
-  --ducktory-color-amber-700: oklch(55.5% 0.163 48.998);
-  --ducktory-color-gray-100: oklch(96.7% 0.003 264.542);
-  --ducktory-color-gray-200: oklch(92.8% 0.006 264.531);
-  --ducktory-color-gray-300: oklch(87.2% 0.01 258.338);
-  --ducktory-color-gray-400: oklch(70.7% 0.022 261.325);
-  --ducktory-color-gray-600: oklch(44.6% 0.03 256.802);
-  --ducktory-color-gray-800: oklch(27.8% 0.033 256.848);
-  --ducktory-color-black: #000;
-  --ducktory-color-white: #fff;
   --ducktory-spacing: 0.25rem;
   --ducktory-text-xs: 0.75rem;
   --ducktory-text-xs--line-height: calc(1 / 0.75);
@@ -172,14 +159,11 @@
   --ducktory-font-weight-semibold: 600;
   --ducktory-font-weight-bold: 700;
   --ducktory-radius-xl: 0.75rem;
-  --ducktory-default-font-family: var(--ducktory-font-sans);
-  --ducktory-default-mono-font-family: var(--ducktory-font-mono);
-}
-.ducktory\:mx-4 {
-  margin-inline: calc(var(--ducktory-spacing) * 4);
-}
-.ducktory\:mt-1 {
-  margin-top: calc(var(--ducktory-spacing) * 1);
+  --ducktory-color-primary: #f5cb5c;
+  --ducktory-color-secondary: #28536b;
+  --ducktory-color-gray: #cfccd6;
+  --ducktory-color-white: #ffffff;
+  --ducktory-font-normal: "Alegreya Sans", sans-serif;
 }
 .ducktory\:mt-2 {
   margin-top: calc(var(--ducktory-spacing) * 2);
@@ -205,8 +189,8 @@
 .ducktory\:w-1\/3 {
   width: calc(1/3 * 100%);
 }
-.ducktory\:max-w-80 {
-  max-width: calc(var(--ducktory-spacing) * 80);
+.ducktory\:max-w-72 {
+  max-width: calc(var(--ducktory-spacing) * 72);
 }
 .ducktory\:min-w-full {
   min-width: 100%;
@@ -226,11 +210,12 @@
 .ducktory\:justify-end {
   justify-content: flex-end;
 }
-.ducktory\:gap-2 {
-  gap: calc(var(--ducktory-spacing) * 2);
-}
-.ducktory\:gap-3 {
-  gap: calc(var(--ducktory-spacing) * 3);
+.ducktory\:-space-y-2 {
+  :where(& > :not(:last-child)) {
+    --tw-space-y-reverse: 0;
+    margin-block-start: calc(calc(var(--ducktory-spacing) * -2) * var(--tw-space-y-reverse));
+    margin-block-end: calc(calc(var(--ducktory-spacing) * -2) * calc(1 - var(--tw-space-y-reverse)));
+  }
 }
 .ducktory\:overflow-hidden {
   overflow: hidden;
@@ -245,31 +230,15 @@
   border-top-style: var(--tw-border-style);
   border-top-width: 1px;
 }
-.ducktory\:border-r-2 {
-  border-right-style: var(--tw-border-style);
-  border-right-width: 2px;
-}
 .ducktory\:border-b {
   border-bottom-style: var(--tw-border-style);
   border-bottom-width: 1px;
 }
-.ducktory\:border-t-gray-200 {
-  border-top-color: var(--ducktory-color-gray-200);
+.ducktory\:border-b-primary {
+  border-bottom-color: var(--ducktory-color-primary);
 }
-.ducktory\:border-r-gray-400 {
-  border-right-color: var(--ducktory-color-gray-400);
-}
-.ducktory\:border-b-gray-300 {
-  border-bottom-color: var(--ducktory-color-gray-300);
-}
-.ducktory\:bg-gray-100 {
-  background-color: var(--ducktory-color-gray-100);
-}
-.ducktory\:bg-gray-200 {
-  background-color: var(--ducktory-color-gray-200);
-}
-.ducktory\:bg-gray-300 {
-  background-color: var(--ducktory-color-gray-300);
+.ducktory\:bg-secondary {
+  background-color: var(--ducktory-color-secondary);
 }
 .ducktory\:bg-white {
   background-color: var(--ducktory-color-white);
@@ -286,6 +255,9 @@
 .ducktory\:px-4 {
   padding-inline: calc(var(--ducktory-spacing) * 4);
 }
+.ducktory\:px-8 {
+  padding-inline: calc(var(--ducktory-spacing) * 8);
+}
 .ducktory\:py-2 {
   padding-block: calc(var(--ducktory-spacing) * 2);
 }
@@ -300,6 +272,9 @@
 }
 .ducktory\:text-center {
   text-align: center;
+}
+.ducktory\:font-normal {
+  font-family: var(--ducktory-font-normal);
 }
 .ducktory\:text-2xl {
   font-size: var(--ducktory-text-2xl);
@@ -325,20 +300,11 @@
   --tw-font-weight: var(--ducktory-font-weight-semibold);
   font-weight: var(--ducktory-font-weight-semibold);
 }
-.ducktory\:text-amber-700 {
-  color: var(--ducktory-color-amber-700);
+.ducktory\:text-gray {
+  color: var(--ducktory-color-gray);
 }
-.ducktory\:text-black {
-  color: var(--ducktory-color-black);
-}
-.ducktory\:text-gray-400 {
-  color: var(--ducktory-color-gray-400);
-}
-.ducktory\:text-gray-600 {
-  color: var(--ducktory-color-gray-600);
-}
-.ducktory\:text-gray-800 {
-  color: var(--ducktory-color-gray-800);
+.ducktory\:text-primary {
+  color: var(--ducktory-color-primary);
 }
 .ducktory\:underline {
   text-decoration-line: underline;
@@ -347,19 +313,10 @@
   --tw-shadow: 0 4px 6px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 2px 4px -2px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
   box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
 }
-.ducktory\:hover\:bg-gray-200 {
-  &:hover {
-    @media (hover: hover) {
-      background-color: var(--ducktory-color-gray-200);
-    }
-  }
-}
-.ducktory\:hover\:bg-gray-300 {
-  &:hover {
-    @media (hover: hover) {
-      background-color: var(--ducktory-color-gray-300);
-    }
-  }
+@property --tw-space-y-reverse {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0;
 }
 @property --tw-border-style {
   syntax: "*";
@@ -438,6 +395,7 @@
 @layer properties {
   @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
     *, ::before, ::after, ::backdrop {
+      --tw-space-y-reverse: 0;
       --tw-border-style: solid;
       --tw-font-weight: initial;
       --tw-shadow: 0 0 #0000;

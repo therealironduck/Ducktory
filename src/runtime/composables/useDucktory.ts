@@ -1,6 +1,8 @@
 import type { StoryDefinition } from '../../types/StoryDefinition'
 import { stories as raw } from '#build/ducktory-stories.mjs'
+import { ducktoryVersion } from '#build/ducktory-version.mjs'
 import { useNuxtApp } from '#app'
+import { computed } from '#imports'
 
 export function useDucktory() {
   const app = useNuxtApp()
@@ -20,10 +22,15 @@ export function useDucktory() {
     return routeDefinition
   }
 
+  const v = computed(() => {
+    return ducktoryVersion
+  })
+
   return {
     stories,
     getName,
     getPath,
+    version: v,
   }
 }
 
