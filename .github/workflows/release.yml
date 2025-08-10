@@ -9,6 +9,8 @@ jobs:
   release-me:
     name: Create Github Release
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.release.outputs.version }}
     steps:
       - name: Run ReleaseMe
         id: release
@@ -17,5 +19,29 @@ jobs:
           token: ${{ github.token }}
 
       - if: ${{ steps.release.outputs.created }}
-        run: echo ${{ fromJSON(steps.release.outputs.release).tag_name }}
+        run: echo "version=${{ fromJSON(steps.release.outputs.release).tag_name }}" >> "$GITHUB_OUTPUT"
+
+  publish:
+    needs: release-me
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          registry-url: https://registry.npmjs.org
+      - run: 'sed -i "s/\"version\": \".*\"/\"version\": \"${VERSION}\"/" package.json'
+        env:
+          VERSION: ${{ needs.release-me.outputs.version }}
+      - run: 'bun install'
+      - run: '(cd playground && bun install)'
+      - run: 'bun run dev:prepare'
+      - run: 'bun run prepack'
+      - run: 'npm publish --provenance --access public'
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
