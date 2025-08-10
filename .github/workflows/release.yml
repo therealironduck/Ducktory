@@ -10,7 +10,7 @@ jobs:
     name: Create Github Release
     runs-on: ubuntu-latest
     outputs:
-      version: ${{ steps.release.outputs.version }}
+      version: ${{ steps.print.outputs.version }}
     steps:
       - name: Run ReleaseMe
         id: release
@@ -19,6 +19,7 @@ jobs:
           token: ${{ github.token }}
 
       - if: ${{ steps.release.outputs.created }}
+        id: print
         run: echo "version=${{ fromJSON(steps.release.outputs.release).tag_name }}" >> "$GITHUB_OUTPUT"
 
   publish:
