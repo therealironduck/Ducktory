@@ -27,6 +27,5 @@ export default defineNuxtConfig({
         files: ['en-GB/messages.json'],
       },
     ],
-    lazy: true,
   },
 })

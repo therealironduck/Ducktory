@@ -23,7 +23,7 @@ async function run(cmd: string[], pwd: string): Promise<boolean> {
     chunks[chunkIndex]?.push(line)
   }
 
-  chunks = chunks.filter(chunk => !chunk[0]?.includes('@nuxt/ui'))
+  chunks = chunks.filter(chunk => !chunk[0]?.includes('node_modules'))
   chunks.forEach((chunk) => {
     chunk.forEach((line, index) => {
       if (index === 0) {
