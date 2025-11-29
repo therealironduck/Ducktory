@@ -5,8 +5,8 @@ import DucktoryActionBtn from '../components/DucktoryActionBtn.vue'
 import DucktoryTabContainer from '../components/DucktoryTabContainer.vue'
 import { useDucktory } from '../composables/useDucktory'
 import { useHead, useRoute, useRouter } from '#app'
-import type { StoryDefinition } from '~/src/types/StoryDefinition'
-import type { CustomVNode } from '~/src/types/VNodeMagic'
+import type { StoryDefinition } from '../../types/StoryDefinition'
+import type { CustomVNode } from '../../types/VNodeMagic'
 
 const { stories, getName } = useDucktory()
 const { params, query, path } = useRoute()
@@ -24,7 +24,7 @@ const defaultTab = computed(() => query.tab as string || 'preview')
 const codeHighlight = ref('Loading...')
 const justCopied = ref(false)
 
-const hasDocumentation = computed(() => story.value?.meta?.documentation !== undefined || componentDocumentation.value?.length > 0)
+const hasDocumentation = computed(() => story.value?.meta?.documentation !== undefined || (componentDocumentation.value?.length ?? 0) > 0)
 const documentation = computed(() => story.value?.meta?.documentation ?? undefined)
 
 useHead({
@@ -38,6 +38,8 @@ watch(story, async (newStory: StoryDefinition | null) => {
 }, { immediate: true })
 
 function copy() {
+  if (!story.value) return
+
   navigator.clipboard.writeText(story.value.code)
   justCopied.value = true
   setTimeout(() => {
@@ -87,7 +89,7 @@ function selectTab(newTab: string) {
       </template>
       <template #tab-docs>
         <ClientOnly>
-          <template v-if="componentDocumentation?.length > 0">
+          <template v-if="(componentDocumentation?.length ?? 0) > 0">
             <component
               :is="(node)"
               v-for="(node, idx) in componentDocumentation"
