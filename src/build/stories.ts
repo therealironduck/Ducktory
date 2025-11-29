@@ -126,6 +126,10 @@ function readStoryMeta(path: string, logger: consola.ConsolaInstance): StoryMeta
           const node = _node as Node
           if (node.type === 'CallExpression' && node.callee.type === 'Identifier' && node.callee.name === 'defineStory') {
             const arg = node.arguments[0]
+            if (!arg) {
+              return
+            }
+
             if (arg.type === 'ObjectExpression' && arg.start != null && arg.end != null) {
               extract = s.slice(arg.start, arg.end)
             }
