@@ -33,7 +33,7 @@ jobs:
       - uses: oven-sh/setup-bun@v2
       - uses: actions/setup-node@v6
         with:
-          node-version: 22.x
+          node-version: 24.x
           registry-url: https://registry.npmjs.org
       - run: 'sed -i "s/\"version\": \".*\"/\"version\": \"${VERSION}\"/" package.json'
         env:
