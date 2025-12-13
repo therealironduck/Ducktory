@@ -10,7 +10,7 @@
   "dependencies": {
     "@nuxt/ui": "4.2.1",
     "@nuxtjs/i18n": "10.2.1",
-    "nuxt": "^4.2.1",
+    "nuxt": "^4.2.2",
     "typescript": "^5.9.3"
   }
 }
