@@ -234,8 +234,6 @@ function publishVersion() {
   const packageJson = JSON.parse(readFileSync(path.resolve(__dirname, '../package.json'), 'utf-8'))
   const version = packageJson.version
 
-  console.log('VER = ' + version)
-
   // Add the version to a Nuxt template
   addTemplate({
     filename: 'ducktory-version.mjs',

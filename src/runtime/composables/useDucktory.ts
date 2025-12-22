@@ -7,6 +7,7 @@ import { computed } from '#imports'
 export function useDucktory() {
   const app = useNuxtApp()
   const stories = raw as { [k: string]: StoryDefinition }
+  const storyCount = computed(() => Object.keys(stories).length)
 
   const getName = (story: StoryDefinition): string => {
     return story.meta?.name || splitPascalCase(story.originalComponentName)
@@ -28,6 +29,7 @@ export function useDucktory() {
 
   return {
     stories,
+    storyCount,
     getName,
     getPath,
     version: v,
