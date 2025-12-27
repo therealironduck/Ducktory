@@ -50,6 +50,6 @@
     "semantic-release": "^25.0.2",
     "tailwindcss": "^4.1.18",
     "typescript": "^5.9.3",
-    "vue-tsc": "^3.2.0"
+    "vue-tsc": "^3.2.1"
   }
 }
