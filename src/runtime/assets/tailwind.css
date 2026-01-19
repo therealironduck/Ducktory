@@ -178,6 +178,21 @@
   --ducktory-color-white: #ffffff;
   --ducktory-font-normal: "Alegreya Sans", sans-serif;
 }
+.ducktory\:absolute {
+  position: absolute;
+}
+.ducktory\:fixed {
+  position: fixed;
+}
+.ducktory\:relative {
+  position: relative;
+}
+.ducktory\:inset-0 {
+  inset: calc(var(--ducktory-spacing) * 0);
+}
+.ducktory\:z-50 {
+  z-index: 50;
+}
 .ducktory\:my-2 {
   margin-block: calc(var(--ducktory-spacing) * 2);
 }
@@ -202,11 +217,20 @@
 .ducktory\:mb-4 {
   margin-bottom: calc(var(--ducktory-spacing) * 4);
 }
+.ducktory\:block {
+  display: block;
+}
 .ducktory\:flex {
   display: flex;
 }
 .ducktory\:grid {
   display: grid;
+}
+.ducktory\:hidden {
+  display: none;
+}
+.ducktory\:h-6 {
+  height: calc(var(--ducktory-spacing) * 6);
 }
 .ducktory\:h-12 {
   height: calc(var(--ducktory-spacing) * 12);
@@ -226,11 +250,17 @@
 .ducktory\:w-2\/3 {
   width: calc(2/3 * 100%);
 }
+.ducktory\:w-6 {
+  width: calc(var(--ducktory-spacing) * 6);
+}
 .ducktory\:w-12 {
   width: calc(var(--ducktory-spacing) * 12);
 }
 .ducktory\:w-32 {
   width: calc(var(--ducktory-spacing) * 32);
+}
+.ducktory\:w-72 {
+  width: calc(var(--ducktory-spacing) * 72);
 }
 .ducktory\:w-full {
   width: 100%;
@@ -240,6 +270,9 @@
 }
 .ducktory\:max-w-72 {
   max-width: calc(var(--ducktory-spacing) * 72);
+}
+.ducktory\:max-w-\[80vw\] {
+  max-width: 80vw;
 }
 .ducktory\:min-w-full {
   min-width: 100%;
@@ -262,6 +295,9 @@
 .ducktory\:items-center {
   align-items: center;
 }
+.ducktory\:justify-between {
+  justify-content: space-between;
+}
 .ducktory\:justify-center {
   justify-content: center;
 }
@@ -283,6 +319,9 @@
 }
 .ducktory\:overflow-scroll {
   overflow: scroll;
+}
+.ducktory\:overflow-y-auto {
+  overflow-y: auto;
 }
 .ducktory\:rounded-2xl {
   border-radius: var(--ducktory-radius-2xl);
@@ -354,6 +393,9 @@
 }
 .ducktory\:text-center {
   text-align: center;
+}
+.ducktory\:text-right {
+  text-align: right;
 }
 .ducktory\:font-normal {
   font-family: var(--ducktory-font-normal);
@@ -440,6 +482,21 @@
     @media (hover: hover) {
       color: var(--ducktory-color-primary);
     }
+  }
+}
+.ducktory\:lg\:flex {
+  @media (width >= 64rem) {
+    display: flex;
+  }
+}
+.ducktory\:lg\:hidden {
+  @media (width >= 64rem) {
+    display: none;
+  }
+}
+.ducktory\:lg\:flex-row {
+  @media (width >= 64rem) {
+    flex-direction: row;
   }
 }
 @property --tw-space-y-reverse {

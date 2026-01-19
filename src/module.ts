@@ -179,6 +179,16 @@ function extendComponents(nuxt: Nuxt, options: DucktoryOptions, resolver: Resolv
       name: 'DucktoryDocumentation',
       filePath: resolver.resolve('runtime/components/DucktoryDocumentation.vue'),
     })
+
+    addComponent({
+      name: 'DucktoryMobileHeader',
+      filePath: resolver.resolve('runtime/components/DucktoryMobileHeader.vue'),
+    })
+
+    addComponent({
+      name: 'DucktoryMobileMenu',
+      filePath: resolver.resolve('runtime/components/DucktoryMobileMenu.vue'),
+    })
   })
 }
 

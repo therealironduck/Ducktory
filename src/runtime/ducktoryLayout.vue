@@ -1,16 +1,40 @@
 <script lang="ts" setup>
+import { ref } from 'vue'
 import { useDucktory } from '#imports'
 
 const { stories, getName, getPath, version } = useDucktory()
+
+const mobileMenuOpen = ref(false)
+
+function toggleMobileMenu() {
+  mobileMenuOpen.value = !mobileMenuOpen.value
+}
+
+function closeMobileMenu() {
+  mobileMenuOpen.value = false
+}
 </script>
 
 <template>
   <div
     id="ducktory"
-    class="ducktory:flex ducktory:min-h-screen ducktory:font-normal ducktory:text-black"
+    class="ducktory:flex ducktory:flex-col ducktory:lg:flex-row ducktory:min-h-screen ducktory:font-normal ducktory:text-black"
   >
+    <!-- Mobile Header -->
+    <DucktoryMobileHeader
+      class="ducktory:lg:hidden"
+      @toggle-menu="toggleMobileMenu"
+    />
+
+    <!-- Mobile Menu -->
+    <DucktoryMobileMenu
+      :open="mobileMenuOpen"
+      @close="closeMobileMenu"
+    />
+
+    <!-- Desktop Sidebar -->
     <aside
-      class="ducktory:w-1/3 ducktory:max-w-72 ducktory:bg-secondary ducktory:flex ducktory:flex-col"
+      class="ducktory:hidden ducktory:lg:flex ducktory:w-1/3 ducktory:max-w-72 ducktory:bg-secondary ducktory:flex-col"
     >
       <header class="ducktory:py-4 ducktory:px-8 ducktory:border-b ducktory:border-b-primary ducktory:text-center ducktory:-space-y-2">
         <NuxtLink
