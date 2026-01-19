@@ -73,7 +73,7 @@ function handleNavigate() {
               :key="'mobile_story_nav_' + story.componentName"
               :to="getPath('ducktory-story', { story: story.originalComponentName })"
               active-class="ducktory:text-primary"
-              class="ducktory:px-4 ducktory:py-3 ducktory:flex ducktory:items-center ducktory:gap-2 ducktory:hover:text-primary"
+              class="ducktory:px-4 ducktory:py-3 ducktory:flex ducktory:items-center ducktory:gap-2 ducktory:text-gray ducktory:hover:text-primary"
               @click="handleNavigate"
             >
               <svg
@@ -82,7 +82,7 @@ function handleNavigate() {
                 viewBox="0 0 24 24"
                 stroke-width="1.5"
                 stroke="currentColor"
-                class="ducktory:w-6 ducktory:h-6"
+                class="ducktory:w-6 ducktory:h-6 ducktory:shrink-0"
               >
                 <path
                   stroke-linecap="round"
@@ -95,9 +95,9 @@ function handleNavigate() {
           </section>
 
           <!-- Footer -->
-          <footer class="ducktory:text-gray-400 ducktory:text-xs ducktory:p-2 ducktory:text-center">
+          <footer class="ducktory:text-gray ducktory:text-xs ducktory:p-2 ducktory:text-center">
             Made with ❤️ by <a
-              class="ducktory:text-gray-600"
+              class="ducktory:text-gray ducktory:underline"
               href="https://github.com/jkniest"
               target="_blank"
             >jkniest</a>

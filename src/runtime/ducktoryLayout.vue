@@ -34,7 +34,7 @@ function closeMobileMenu() {
 
     <!-- Desktop Sidebar -->
     <aside
-      class="ducktory:hidden ducktory:lg:flex ducktory:w-1/3 ducktory:max-w-72 ducktory:bg-secondary ducktory:flex-col"
+      class="ducktory:hidden ducktory:lg:flex ducktory:w-72 ducktory:shrink-0 ducktory:bg-secondary ducktory:flex-col"
     >
       <header class="ducktory:py-4 ducktory:px-8 ducktory:border-b ducktory:border-b-primary ducktory:text-center ducktory:-space-y-2">
         <NuxtLink
@@ -52,7 +52,7 @@ function closeMobileMenu() {
           :key="'story_nav_' + story.componentName"
           :to="getPath('ducktory-story', { story: story.originalComponentName })"
           active-class="ducktory:text-primary"
-          class="ducktory:px-4 ducktory:py-3 ducktory:flex ducktory:items-center ducktory:gap-2 ducktory:hover:text-primary"
+          class="ducktory:px-4 ducktory:py-3 ducktory:flex ducktory:items-center ducktory:gap-2 ducktory:text-gray ducktory:hover:text-primary"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -60,7 +60,7 @@ function closeMobileMenu() {
             viewBox="0 0 24 24"
             stroke-width="1.5"
             stroke="currentColor"
-            class="size-6"
+            class="ducktory:w-6 ducktory:h-6 ducktory:shrink-0"
           >
             <path
               stroke-linecap="round"
@@ -72,16 +72,16 @@ function closeMobileMenu() {
         </NuxtLink>
       </section>
 
-      <footer class="ducktory:mt-auto ducktory:text-gray-400 ducktory:text-xs ducktory:p-2 ducktory:text-center">
+      <footer class="ducktory:mt-auto ducktory:text-gray ducktory:text-xs ducktory:p-2 ducktory:text-center">
         Made with ❤️ by <a
-          class="ducktory:text-gray-600"
+          class="ducktory:text-gray ducktory:underline"
           href="https://github.com/jkniest"
           target="_blank"
         >jkniest</a>
       </footer>
     </aside>
     <main
-      class="ducktory:bg-gray ducktory:flex-1 ducktory:p-8"
+      class="ducktory:bg-gray ducktory:flex-1 ducktory:min-w-0 ducktory:overflow-x-hidden ducktory:p-8"
     >
       <NuxtPage />
     </main>
