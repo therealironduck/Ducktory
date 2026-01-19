@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { computed } from '#imports'
-import type { DucktoryIntegration } from '../../types/DucktoryIntegration'
+import type { DucktoryIntegrationInfo } from '../../types/DucktoryIntegration'
 
 const props = defineProps<{
-  integration: DucktoryIntegration
+  integration: DucktoryIntegrationInfo
 }>()
 
 const wrapperClasses = computed(() => [

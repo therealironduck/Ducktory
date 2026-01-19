@@ -1,18 +1,8 @@
 <script lang="ts" setup>
 import { useDucktory } from '../composables/useDucktory'
 import DucktoryIntegrationBadge from '../components/DucktoryIntegrationBadge.vue'
-import type { DucktoryIntegration } from '../../types/DucktoryIntegration'
-import { ref } from '#imports'
 
-const { storyCount } = useDucktory()
-
-const integrations = ref<DucktoryIntegration[]>([{
-  name: 'Nuxt i18n',
-  enabled: true,
-}, {
-  name: 'Tailwind',
-  enabled: false,
-}])
+const { storyCount, integrations } = useDucktory()
 </script>
 
 <template>
@@ -26,10 +16,16 @@ const integrations = ref<DucktoryIntegration[]>([{
       </p>
 
       <div class="ducktory:flex ducktory:gap-4 ducktory:mt-8">
-        <div class="ducktory:bg-white ducktory:rounded-2xl ducktory:shadow-lg ducktory:py-6 ducktory:px-4 ducktory:w-1/3">
+        <div
+          class="ducktory:bg-white ducktory:rounded-2xl ducktory:shadow-lg ducktory:py-6 ducktory:px-4 ducktory:w-1/3"
+        >
           <h2 class="ducktory:text-lg ducktory:text-secondary ducktory:text-center">
             Integrations
           </h2>
+
+          <div class="ducktory:bg-primary ducktory:text-secondary ducktory:rounded-2xl ducktory:my-2 ducktory:p-3">
+            <strong>Note:</strong> The integration feature is currently still Work In Progress and does not work yet!
+          </div>
 
           <ul class="ducktory:flex ducktory:flex-col ducktory:gap-2 ducktory:mt-2">
             <li
@@ -40,7 +36,9 @@ const integrations = ref<DucktoryIntegration[]>([{
             </li>
           </ul>
         </div>
-        <div class="ducktory:bg-white ducktory:rounded-2xl ducktory:shadow-lg ducktory:py-6 ducktory:px-4 ducktory:w-2/3">
+        <div
+          class="ducktory:bg-white ducktory:rounded-2xl ducktory:shadow-lg ducktory:py-6 ducktory:px-4 ducktory:w-2/3"
+        >
           <h2 class="ducktory:text-lg ducktory:text-secondary ducktory:text-center">
             Quick Links
           </h2>

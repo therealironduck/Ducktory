@@ -190,6 +190,9 @@
     max-width: 96rem;
   }
 }
+.ducktory\:my-2 {
+  margin-block: calc(var(--ducktory-spacing) * 2);
+}
 .ducktory\:mt-2 {
   margin-top: calc(var(--ducktory-spacing) * 2);
 }
@@ -292,6 +295,9 @@
 .ducktory\:bg-gray {
   background-color: var(--ducktory-color-gray);
 }
+.ducktory\:bg-primary {
+  background-color: var(--ducktory-color-primary);
+}
 .ducktory\:bg-secondary {
   background-color: var(--ducktory-color-secondary);
 }
@@ -303,6 +309,9 @@
 }
 .ducktory\:p-2 {
   padding: calc(var(--ducktory-spacing) * 2);
+}
+.ducktory\:p-3 {
+  padding: calc(var(--ducktory-spacing) * 3);
 }
 .ducktory\:p-4 {
   padding: calc(var(--ducktory-spacing) * 4);

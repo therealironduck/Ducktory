@@ -5,8 +5,8 @@ import type { HookResult, Nuxt } from '@nuxt/schema'
 import type * as consola from 'consola'
 import { addStory, loadStoryTemplate, removeStory, updateStory } from './build/stories'
 import { extendBundler } from './build/bundler'
-
 import { readFileSync } from 'node:fs'
+import { loadIntegrations } from './build/integrations'
 
 declare module '#app' {
   // noinspection JSUnusedGlobalSymbols
@@ -54,6 +54,8 @@ export interface DucktoryOptions {
    * @default 'story'
    */
   storyComponentSuffix: string
+
+  // TODO: Allow to manually disable integrations
 }
 
 // noinspection JSUnusedGlobalSymbols
@@ -87,6 +89,13 @@ export default defineNuxtModule<DucktoryOptions>({
      * which can be used to render the stories runtime.
      */
     await loadStoryTemplate(options, nuxt, logger)
+
+    /**
+     * Load all integrations and prepare the information for the frontend.
+     * This also allows the integrations to register custom hooks and
+     * modify the Nuxt Options.
+     */
+    loadIntegrations(logger)
 
     /**
      * Extend the vite bundler to remove the `defineStoryMeta` composable from the final
