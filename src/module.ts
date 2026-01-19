@@ -143,7 +143,7 @@ export default defineNuxtModule<DucktoryOptions>({
     /**
      * Publish the current package.json version to be used in templates
      */
-    publishVersion()
+    publishVersion(resolver)
   },
 })
 
@@ -249,8 +249,8 @@ function registerCustomTypes() {
   })
 }
 
-function publishVersion() {
-  const packageJson = JSON.parse(readFileSync(path.resolve(__dirname, '../package.json'), 'utf-8'))
+function publishVersion(resolver: Resolver) {
+  const packageJson = JSON.parse(readFileSync(resolver.resolve('../package.json'), 'utf-8'))
   const version = packageJson.version
 
   // Add the version to a Nuxt template
