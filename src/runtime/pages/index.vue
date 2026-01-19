@@ -27,29 +27,10 @@ const subtitle = computed(() => {
         v-text="subtitle"
       />
 
-      <div class="ducktory:flex ducktory:gap-4 ducktory:mt-8">
+      <div class="ducktory:flex ducktory:flex-col ducktory:xl:flex-row-reverse ducktory:gap-4 ducktory:mt-8">
+        <!-- Quick Links (first on mobile, right side on desktop) -->
         <div
-          class="ducktory:bg-white ducktory:rounded-2xl ducktory:shadow-lg ducktory:py-6 ducktory:px-4 ducktory:w-1/3"
-        >
-          <h2 class="ducktory:text-lg ducktory:text-secondary ducktory:text-center">
-            Integrations
-          </h2>
-
-          <div class="ducktory:bg-primary ducktory:text-secondary ducktory:rounded-2xl ducktory:my-2 ducktory:p-3">
-            <strong>Note:</strong> The integration feature is currently still Work In Progress and does not work yet!
-          </div>
-
-          <ul class="ducktory:flex ducktory:flex-col ducktory:gap-2 ducktory:mt-2">
-            <li
-              v-for="integration in integrations"
-              :key="integration.name"
-            >
-              <DucktoryIntegrationBadge :integration="integration" />
-            </li>
-          </ul>
-        </div>
-        <div
-          class="ducktory:bg-white ducktory:rounded-2xl ducktory:shadow-lg ducktory:py-6 ducktory:px-4 ducktory:w-2/3"
+          class="ducktory:bg-white ducktory:rounded-2xl ducktory:shadow-lg ducktory:py-6 ducktory:px-4 ducktory:w-full ducktory:xl:w-2/3"
         >
           <h2 class="ducktory:text-lg ducktory:text-secondary ducktory:text-center">
             Quick Links
@@ -120,6 +101,28 @@ const subtitle = computed(() => {
               </svg>
             </DucktoryQuickButton>
           </div>
+        </div>
+
+        <!-- Integrations (second on mobile, left side on desktop) -->
+        <div
+          class="ducktory:bg-white ducktory:rounded-2xl ducktory:shadow-lg ducktory:py-6 ducktory:px-4 ducktory:w-full ducktory:xl:w-1/3"
+        >
+          <h2 class="ducktory:text-lg ducktory:text-secondary ducktory:text-center">
+            Integrations
+          </h2>
+
+          <div class="ducktory:bg-primary ducktory:text-secondary ducktory:rounded-2xl ducktory:my-2 ducktory:p-3">
+            <strong>Note:</strong> The integration feature is currently still Work In Progress and does not work yet!
+          </div>
+
+          <ul class="ducktory:flex ducktory:flex-col ducktory:gap-2 ducktory:mt-2">
+            <li
+              v-for="integration in integrations"
+              :key="integration.name"
+            >
+              <DucktoryIntegrationBadge :integration="integration" />
+            </li>
+          </ul>
         </div>
       </div>
     </div>
