@@ -1,10 +1,12 @@
 import path from 'node:path'
 import type { Resolver } from '@nuxt/kit'
-import { addComponent, addImportsDir, addLayout, addTypeTemplate, addVitePlugin, createResolver, defineNuxtModule, useLogger } from '@nuxt/kit'
+import { addComponent, addImportsDir, addLayout, addTemplate, addTypeTemplate, addVitePlugin, createResolver, defineNuxtModule, useLogger } from '@nuxt/kit'
 import type { HookResult, Nuxt } from '@nuxt/schema'
 import type * as consola from 'consola'
 import { addStory, loadStoryTemplate, removeStory, updateStory } from './build/stories'
 import { extendBundler } from './build/bundler'
+import { readFileSync } from 'node:fs'
+import { loadIntegrations } from './build/integrations'
 
 declare module '#app' {
   // noinspection JSUnusedGlobalSymbols
@@ -52,6 +54,8 @@ export interface DucktoryOptions {
    * @default 'story'
    */
   storyComponentSuffix: string
+
+  // TODO: Allow to manually disable integrations
 }
 
 // noinspection JSUnusedGlobalSymbols
@@ -85,6 +89,13 @@ export default defineNuxtModule<DucktoryOptions>({
      * which can be used to render the stories runtime.
      */
     await loadStoryTemplate(options, nuxt, logger)
+
+    /**
+     * Load all integrations and prepare the information for the frontend.
+     * This also allows the integrations to register custom hooks and
+     * modify the Nuxt Options.
+     */
+    loadIntegrations(logger)
 
     /**
      * Extend the vite bundler to remove the `defineStoryMeta` composable from the final
@@ -128,6 +139,11 @@ export default defineNuxtModule<DucktoryOptions>({
      * throw an error if NuxtI18n is not installed.
      */
     registerCustomTypes()
+
+    /**
+     * Publish the current package.json version to be used in templates
+     */
+    publishVersion(resolver)
   },
 })
 
@@ -162,6 +178,16 @@ function extendComponents(nuxt: Nuxt, options: DucktoryOptions, resolver: Resolv
     addComponent({
       name: 'DucktoryDocumentation',
       filePath: resolver.resolve('runtime/components/DucktoryDocumentation.vue'),
+    })
+
+    addComponent({
+      name: 'DucktoryMobileHeader',
+      filePath: resolver.resolve('runtime/components/DucktoryMobileHeader.vue'),
+    })
+
+    addComponent({
+      name: 'DucktoryMobileMenu',
+      filePath: resolver.resolve('runtime/components/DucktoryMobileMenu.vue'),
     })
   })
 }
@@ -219,6 +245,19 @@ function registerCustomTypes() {
         }
 
         export {}
+      `,
+  })
+}
+
+function publishVersion(resolver: Resolver) {
+  const packageJson = JSON.parse(readFileSync(resolver.resolve('../package.json'), 'utf-8'))
+  const version = packageJson.version
+
+  // Add the version to a Nuxt template
+  addTemplate({
+    filename: 'ducktory-version.mjs',
+    getContents: () => `
+        export const ducktoryVersion = '${version}';
       `,
   })
 }
