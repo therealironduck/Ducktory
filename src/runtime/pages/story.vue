@@ -1,16 +1,13 @@
 <script lang="ts" setup>
 import { codeToHtml } from 'shiki'
 import { provide, computed, ref, watch } from 'vue'
-import DucktoryActionBtn from '../components/DucktoryActionBtn.vue'
-import DucktoryTabContainer from '../components/DucktoryTabContainer.vue'
 import { useDucktory } from '../composables/useDucktory'
-import { useHead, useRoute, useRouter } from '#app'
+import { useHead, useRoute } from '#app'
 import type { StoryDefinition } from '../../types/StoryDefinition'
 import type { CustomVNode } from '../../types/VNodeMagic'
 
 const { stories, getName } = useDucktory()
-const { params, query, path } = useRoute()
-const { push } = useRouter()
+const { params } = useRoute()
 
 const story = computed(() => stories[params.story as string] ?? null)
 const title = computed(() => story.value ? getName(story.value) : '')
@@ -18,8 +15,6 @@ const pageTitle = computed(() => `Ducktory - ${title.value || 'Not Found'}`)
 const componentDocumentation = ref<CustomVNode[] | undefined>(undefined)
 
 provide('ducktory-documentation', componentDocumentation)
-
-const defaultTab = computed(() => query.tab as string || 'preview')
 
 const codeHighlight = ref('Loading...')
 const justCopied = ref(false)
@@ -46,90 +41,66 @@ function copy() {
     justCopied.value = false
   }, 1500)
 }
-
-function selectTab(newTab: string) {
-  push({ path, query: { tab: newTab } })
-}
 </script>
 
 <template>
   <template v-if="story">
     <h1
-      class="ducktory:text-2xl ducktory:font-semibold"
+      class="ducktory:text-center ducktory:text-secondary ducktory:text-xl ducktory:font-semibold ducktory:mt-6"
       v-text="title"
     />
 
-    <DucktoryTabContainer
-      :default="defaultTab"
-      :tabs="['preview', 'code', 'docs']"
-      class="ducktory:bg-white ducktory:mt-4 ducktory:overflow-hidden ducktory:shadow-md ducktory:rounded-xl"
-      content-classes="ducktory:p-4"
-      tab-classes="ducktory:flex ducktory:border-t ducktory:border-t-gray-200"
-      @select="selectTab"
+    <section
+      v-if="hasDocumentation"
+      class="ducktory:text-center ducktory:text-secondary ducktory:mt-3"
     >
-      <template #tab-preview>
-        <component
-          :is="story.componentName"
-          ref="preview"
-        />
-      </template>
-      <template #tab-code>
+      <ClientOnly>
+        <template v-if="(componentDocumentation?.length ?? 0) > 0">
+          <component
+            :is="(node)"
+            v-for="(node, idx) in componentDocumentation"
+            :key="idx"
+          />
+        </template>
         <div
-          class="ducktory:overflow-scroll ducktory:min-w-full ducktory-code-wrapper"
-          v-html="codeHighlight"
+          v-else
+          v-html="documentation"
         />
-        <div class="ducktory:flex ducktory:justify-end ducktory:mt-2 ducktory:text-sm">
-          <a
-            class="ducktory:underline ducktory:text-amber-700"
-            href="#"
-            @click.prevent="copy"
-            v-text="justCopied ? 'Copied!' : 'Copy'"
-          />
-        </div>
-      </template>
-      <template #tab-docs>
-        <ClientOnly>
-          <template v-if="(componentDocumentation?.length ?? 0) > 0">
-            <component
-              :is="(node)"
-              v-for="(node, idx) in componentDocumentation"
-              :key="idx"
-            />
-          </template>
-          <div
-            v-else
-            v-html="documentation"
-          />
-        </ClientOnly>
-      </template>
+      </ClientOnly>
+    </section>
 
-      <template #tabs="{ select, active }">
-        <DucktoryActionBtn
-          :active="active === 'preview'"
-          @click="select('preview')"
-        >
-          Preview
-        </DucktoryActionBtn>
-        <DucktoryActionBtn
-          :active="active === 'code'"
-          @click="select('code')"
-        >
-          Code
-        </DucktoryActionBtn>
-        <DucktoryActionBtn
-          v-show="hasDocumentation"
-          :active="active === 'docs'"
-          @click="select('docs')"
-        >
-          Documentation
-        </DucktoryActionBtn>
-        <div
-          class="ducktory:ml-auto ducktory:text-sm ducktory:flex ducktory:items-center ducktory:text-gray-600 ducktory:pr-4"
-        >
-          {{ story.originalComponentName }}.story.vue
-        </div>
-      </template>
-    </DucktoryTabContainer>
+    <section class="ducktory:text-secondary ducktory:bg-white ducktory:rounded-2xl ducktory:mt-6 ducktory:p-6">
+      <h2 class="ducktory:text-xl ducktory:text-center ducktory:mb-4">
+        Preview
+      </h2>
+
+      <component
+        :is="story.componentName"
+        ref="preview"
+      />
+    </section>
+
+    <section class="ducktory:text-secondary ducktory:bg-white ducktory:rounded-2xl ducktory:p-6 mt-6">
+      <div class="ducktory:mb-4 ducktory:text-center">
+        <h2 class="ducktory:text-xl">
+          Source Code
+        </h2>
+        <span class="ducktory:text-sm">{{ story.originalComponentName }}.story.vue</span>
+      </div>
+
+      <div
+        class="ducktory:overflow-scroll ducktory:min-w-full ducktory-code-wrapper"
+        v-html="codeHighlight"
+      />
+      <div class="ducktory:flex ducktory:justify-end ducktory:mt-2 ducktory:text-sm">
+        <a
+          class="ducktory:underline ducktory:text-amber-700"
+          href="#"
+          @click.prevent="copy"
+          v-text="justCopied ? 'Copied!' : 'Copy'"
+        />
+      </div>
+    </section>
   </template>
   <div v-else>
     Story not found
@@ -137,7 +108,7 @@ function selectTab(newTab: string) {
 </template>
 
 <style>
-.ducktory-code-wrapper > pre {
+.ducktory-code-wrapper>pre {
   min-width: fit-content;
   padding-top: 1rem;
   padding-bottom: 1rem;
