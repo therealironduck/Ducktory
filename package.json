@@ -35,7 +35,7 @@
     "consola": "^3.4.2",
     "estree-walker": "^3.0.3",
     "magic-string": "^0.30.21",
-    "shiki": "^3.21.0",
+    "shiki": "^4.0.2",
     "unplugin": "^3.0.0"
   },
   "devDependencies": {
@@ -49,7 +49,7 @@
     "nuxt": "^4.3.0",
     "semantic-release": "^25.0.2",
     "tailwindcss": "^4.1.18",
-    "typescript": "^5.9.3",
+    "typescript": "^6.0.2",
     "vue-tsc": "^3.2.4"
   }
 }
