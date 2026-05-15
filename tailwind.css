@@ -1,8 +1,20 @@
 @layer base {
-    #ducktory {
-        @import "tailwindcss/preflight.css";
-    }
+  #ducktory {
+    @import "tailwindcss/preflight.css";
+  }
 }
 
 @import "tailwindcss/theme.css" prefix(ducktory);
 @import "tailwindcss/utilities.css" prefix(ducktory);
+
+@theme {
+  --color-*: initial;
+  --color-primary: #f5cb5c;
+  --color-secondary: #28536b;
+  --color-gray: #cfccd6;
+  --color-success: #169873;
+  --color-white: #ffffff;
+
+  --font-*: initial;
+  --font-normal: "Alegreya Sans", sans-serif;
+}

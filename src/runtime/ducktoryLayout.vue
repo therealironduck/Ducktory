@@ -1,52 +1,49 @@
 <script lang="ts" setup>
+import { ref } from 'vue'
 import { useDucktory } from '#imports'
 
-const { stories, getName, getPath } = useDucktory()
+const { stories, getName, getPath, version } = useDucktory()
+
+const mobileMenuOpen = ref(false)
+
+function toggleMobileMenu() {
+  mobileMenuOpen.value = !mobileMenuOpen.value
+}
+
+function closeMobileMenu() {
+  mobileMenuOpen.value = false
+}
 </script>
 
 <template>
   <div
     id="ducktory"
-    class="ducktory:flex ducktory:min-h-screen ducktory:font-main ducktory:text-black"
+    class="ducktory:flex ducktory:flex-col ducktory:lg:flex-row ducktory:min-h-screen ducktory:font-normal ducktory:text-black"
   >
-    <aside
-      class="ducktory:w-1/3 ducktory:max-w-80 ducktory:bg-gray-200 ducktory:border-r-2 ducktory:border-r-gray-400 ducktory:flex ducktory:flex-col"
-    >
-      <header class="ducktory:py-4 ducktory:mx-4 ducktory:border-b ducktory:border-b-gray-300">
-        <div class="ducktory:flex ducktory:items-center ducktory:gap-3">
-          <NuxtLink
-            :to="getPath('ducktory')"
-            class="ducktory:text-2xl ducktory:font-bold ducktory:text-amber-700"
-          >
-            Ducktory
-          </NuxtLink>
-          <span class="ducktory:text-sm ducktory:font-light ducktory:text-gray-800">v0.1.0</span>
-        </div>
+    <!-- Mobile Header -->
+    <DucktoryMobileHeader
+      class="ducktory:lg:hidden"
+      @toggle-menu="toggleMobileMenu"
+    />
 
-        <div class="ducktory:flex ducktory:items-center ducktory:text-gray-600 ducktory:gap-2 ducktory:mt-1">
-          <svg
-            color="#000"
-            fill="none"
-            height="18"
-            stroke-width="1.5"
-            viewBox="0 0 24 24"
-            width="18"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M5 19.5V5a2 2 0 0 1 2-2h11.4a.6.6 0 0 1 .6.6V21M9 7h6M6.5 15H19M6.5 18H19M6.5 21H19"
-              stroke="#000"
-              stroke-linecap="round"
-            />
-            <path
-              d="M6.5 18c-1 0-1.5-.672-1.5-1.5S5.5 15 6.5 15M6.5 21c-1 0-1.5-.672-1.5-1.5S5.5 18 6.5 18"
-              stroke="#000"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
-          <span class="ducktory:text-sm">Found {{ Object.keys(stories).length }} stories</span>
-        </div>
+    <!-- Mobile Menu -->
+    <DucktoryMobileMenu
+      :open="mobileMenuOpen"
+      @close="closeMobileMenu"
+    />
+
+    <!-- Desktop Sidebar -->
+    <aside
+      class="ducktory:hidden ducktory:lg:flex ducktory:w-72 ducktory:shrink-0 ducktory:bg-secondary ducktory:flex-col"
+    >
+      <header class="ducktory:py-4 ducktory:px-8 ducktory:border-b ducktory:border-b-primary ducktory:text-center ducktory:-space-y-2">
+        <NuxtLink
+          :to="getPath('ducktory')"
+          class="ducktory:text-2xl ducktory:font-bold ducktory:text-primary block"
+        >
+          Ducktory
+        </NuxtLink>
+        <span class="ducktory:text-xs ducktory:font-light ducktory:text-gray">Version {{ version }}</span>
       </header>
 
       <section class="ducktory:mt-2">
@@ -54,24 +51,37 @@ const { stories, getName, getPath } = useDucktory()
           v-for="story in stories"
           :key="'story_nav_' + story.componentName"
           :to="getPath('ducktory-story', { story: story.originalComponentName })"
-          active-class="ducktory:bg-gray-300"
-          class="ducktory:px-4 ducktory:py-3 ducktory:hover:bg-gray-300 ducktory:block"
+          active-class="ducktory:text-primary"
+          class="ducktory:px-4 ducktory:py-3 ducktory:flex ducktory:items-center ducktory:gap-2 ducktory:text-gray ducktory:hover:text-primary"
         >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="ducktory:w-6 ducktory:h-6 ducktory:shrink-0"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
+            />
+          </svg>
           {{ getName(story) }}
         </NuxtLink>
       </section>
 
-      <footer class="ducktory:mt-auto ducktory:text-gray-400 ducktory:text-xs ducktory:p-2 ducktory:text-center">
+      <footer class="ducktory:mt-auto ducktory:text-gray ducktory:text-xs ducktory:p-2 ducktory:text-center">
         Made with ❤️ by <a
-          class="ducktory:text-gray-600"
+          class="ducktory:text-gray ducktory:underline"
           href="https://github.com/jkniest"
           target="_blank"
         >jkniest</a>
       </footer>
     </aside>
     <main
-      class="ducktory:bg-gray-100 ducktory:flex-1 ducktory:p-8"
-      style="max-width: calc(100vw - 20rem)"
+      class="ducktory:bg-gray ducktory:flex-1 ducktory:min-w-0 ducktory:overflow-x-hidden ducktory:p-8"
     >
       <NuxtPage />
     </main>
