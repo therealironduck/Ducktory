@@ -1,10 +1,12 @@
 import path from 'node:path'
 import type { Resolver } from '@nuxt/kit'
-import { addComponent, addImportsDir, addLayout, addTypeTemplate, addVitePlugin, createResolver, defineNuxtModule, useLogger } from '@nuxt/kit'
+import { addComponent, addImportsDir, addLayout, addTemplate, addTypeTemplate, addVitePlugin, createResolver, defineNuxtModule, useLogger } from '@nuxt/kit'
 import type { HookResult, Nuxt } from '@nuxt/schema'
 import type * as consola from 'consola'
 import { addStory, loadStoryTemplate, removeStory, updateStory } from './build/stories'
 import { extendBundler } from './build/bundler'
+import { readFileSync } from 'node:fs'
+import { loadIntegrations } from './build/integrations'
 
 declare module '#app' {
   // noinspection JSUnusedGlobalSymbols
@@ -52,6 +54,8 @@ export interface DucktoryOptions {
    * @default 'story'
    */
   storyComponentSuffix: string
+
+  // TODO: Allow to manually disable integrations
 }
 
 // noinspection JSUnusedGlobalSymbols
@@ -85,6 +89,13 @@ export default defineNuxtModule<DucktoryOptions>({
      * which can be used to render the stories runtime.
      */
     await loadStoryTemplate(options, nuxt, logger)
+
+    /**
+     * Load all integrations and prepare the information for the frontend.
+     * This also allows the integrations to register custom hooks and
+     * modify the Nuxt Options.
+     */
+    loadIntegrations(logger)
 
     /**
      * Extend the vite bundler to remove the `defineStoryMeta` composable from the final
@@ -128,6 +139,11 @@ export default defineNuxtModule<DucktoryOptions>({
      * throw an error if NuxtI18n is not installed.
      */
     registerCustomTypes()
+
+    /**
+     * Publish the current package.json version to be used in templates
+     */
+    publishVersion(resolver)
   },
 })
 
@@ -158,39 +174,58 @@ function extendComponents(nuxt: Nuxt, options: DucktoryOptions, resolver: Resolv
       extensions: [`${options.storyComponentSuffix}.vue`],
       global: true,
     })
+  })
 
-    addComponent({
-      name: 'DucktoryDocumentation',
-      filePath: resolver.resolve('runtime/components/DucktoryDocumentation.vue'),
-    })
+  addComponent({
+    name: 'DucktoryDocumentation',
+    filePath: resolver.resolve('runtime/components/DucktoryDocumentation.vue'),
+  })
+
+  addComponent({
+    name: 'DucktoryMobileHeader',
+    filePath: resolver.resolve('runtime/components/DucktoryMobileHeader.vue'),
+  })
+
+  addComponent({
+    name: 'DucktoryMobileMenu',
+    filePath: resolver.resolve('runtime/components/DucktoryMobileMenu.vue'),
   })
 }
 
 function handleHmr(nuxt: Nuxt, options: DucktoryOptions, logger: consola.ConsolaInstance) {
-  nuxt.hook('builder:watch', async (event, path) => {
-    if (!path.includes(options.storyDirectory) || !path.endsWith(`.${options.storyComponentSuffix}.vue`)) {
+  const storyDirAbsPath = path.join(nuxt.options.rootDir, options.storyDirectory)
+
+  nuxt.hook('builder:watch', async (event, watchPath) => {
+    if (!watchPath.includes(options.storyDirectory) || !watchPath.endsWith(`.${options.storyComponentSuffix}.vue`)) {
       return
     }
+
+    const file = watchPath.startsWith(storyDirAbsPath)
+      ? watchPath.substring(storyDirAbsPath.length + 1)
+      : path.basename(watchPath)
 
     logger.debug('Story file changed. Reloading stories...')
     switch (event) {
       case 'add':
-        await addStory(path.substring(options.storyDirectory.length + 1), options, nuxt, logger)
+        await addStory(file, options, nuxt, logger)
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         await nuxt.callHook('ducktory:full-reload' as any)
         break
 
       case 'unlink':
-        await removeStory(path.substring(options.storyDirectory.length + 1), options, logger)
+        await removeStory(file, options, logger)
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         await nuxt.callHook('ducktory:full-reload' as any)
         break
 
-      case 'change':
-        await updateStory(path.substring(options.storyDirectory.length + 1), options, nuxt, logger)
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        await nuxt.callHook('ducktory:full-reload' as any)
+      case 'change': {
+        const metaChanged = await updateStory(file, options, nuxt, logger)
+        if (metaChanged) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          await nuxt.callHook('ducktory:full-reload' as any)
+        }
         break
+      }
     }
   })
 
@@ -219,6 +254,19 @@ function registerCustomTypes() {
         }
 
         export {}
+      `,
+  })
+}
+
+function publishVersion(resolver: Resolver) {
+  const packageJson = JSON.parse(readFileSync(resolver.resolve('../package.json'), 'utf-8'))
+  const version = packageJson.version
+
+  // Add the version to a Nuxt template
+  addTemplate({
+    filename: 'ducktory-version.mjs',
+    getContents: () => `
+        export const ducktoryVersion = '${version}';
       `,
   })
 }

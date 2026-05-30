@@ -54,27 +54,31 @@ export async function removeStory(file: string, options: DucktoryOptions, logger
   await updateTemplates({ filter: t => t.filename === TEMPLATE_FILE })
 }
 
-export async function updateStory(file: string, options: DucktoryOptions, nuxt: Nuxt, logger: consola.ConsolaInstance) {
+export async function updateStory(file: string, options: DucktoryOptions, nuxt: Nuxt, logger: consola.ConsolaInstance): Promise<boolean> {
   const filePath = path.join(nuxt.options.rootDir, options.storyDirectory, file)
   const originalName = file.replace(`.${options.storyComponentSuffix}.vue`, '')
-  const meta = readStoryMeta(filePath, logger)
   const story = stories.get(originalName)
 
-  if (!story || !meta) {
+  if (!story) {
     return false
   }
 
+  const meta = readStoryMeta(filePath, logger)
   const code = readStoryCode(filePath)
 
   if (JSON.stringify(meta) === JSON.stringify(story.meta) && code === story.code) {
-    return
+    return false
   }
+
+  const metaChanged = JSON.stringify(meta) !== JSON.stringify(story.meta)
 
   logger.debug(`Updated story meta/code: "${file}"`)
 
   story.code = code
   story.meta = meta
   await updateTemplates({ filter: t => t.filename === TEMPLATE_FILE })
+
+  return metaChanged
 }
 
 async function loadInitialStories(options: DucktoryOptions, nuxt: Nuxt, logger: consola.ConsolaInstance) {
