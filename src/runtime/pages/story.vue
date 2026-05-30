@@ -69,18 +69,20 @@ function copy() {
       </ClientOnly>
     </section>
 
-    <section class="ducktory:text-secondary ducktory:bg-white ducktory:rounded-2xl ducktory:mt-6 ducktory:p-6">
+    <section class="ducktory:text-secondary ducktory:bg-white ducktory:rounded-2xl ducktory:mt-6 ducktory:p-6 ducktory:overflow-hidden">
       <h2 class="ducktory:text-xl ducktory:text-center ducktory:mb-4">
         Preview
       </h2>
 
-      <component
-        :is="story.componentName"
-        ref="preview"
-      />
+      <div class="ducktory:overflow-x-auto ducktory-preview-wrapper">
+        <component
+          :is="story.componentName"
+          ref="preview"
+        />
+      </div>
     </section>
 
-    <section class="ducktory:text-secondary ducktory:bg-white ducktory:rounded-2xl ducktory:p-6 mt-6">
+    <section class="ducktory:text-secondary ducktory:bg-white ducktory:rounded-2xl ducktory:p-6 ducktory:mt-6 ducktory:overflow-hidden">
       <div class="ducktory:mb-4 ducktory:text-center">
         <h2 class="ducktory:text-xl">
           Source Code
@@ -89,7 +91,7 @@ function copy() {
       </div>
 
       <div
-        class="ducktory:overflow-scroll ducktory:min-w-full ducktory-code-wrapper"
+        class="ducktory:overflow-x-auto ducktory:min-w-full ducktory-code-wrapper"
         v-html="codeHighlight"
       />
       <div class="ducktory:flex ducktory:justify-end ducktory:mt-2 ducktory:text-sm">
@@ -113,5 +115,24 @@ function copy() {
   padding-top: 1rem;
   padding-bottom: 1rem;
   width: 100%;
+}
+
+.ducktory-preview-wrapper::-webkit-scrollbar,
+.ducktory-code-wrapper::-webkit-scrollbar {
+  height: 8px;
+}
+
+.ducktory-code-wrapper::-webkit-scrollbar-track {
+  background: var(--shiki-light-bg, #eff1f5);
+}
+
+.ducktory-preview-wrapper::-webkit-scrollbar-track {
+  background: #ffffff;
+}
+
+.ducktory-code-wrapper::-webkit-scrollbar-thumb,
+.ducktory-preview-wrapper::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 4px;
 }
 </style>

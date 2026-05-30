@@ -174,49 +174,58 @@ function extendComponents(nuxt: Nuxt, options: DucktoryOptions, resolver: Resolv
       extensions: [`${options.storyComponentSuffix}.vue`],
       global: true,
     })
+  })
 
-    addComponent({
-      name: 'DucktoryDocumentation',
-      filePath: resolver.resolve('runtime/components/DucktoryDocumentation.vue'),
-    })
+  addComponent({
+    name: 'DucktoryDocumentation',
+    filePath: resolver.resolve('runtime/components/DucktoryDocumentation.vue'),
+  })
 
-    addComponent({
-      name: 'DucktoryMobileHeader',
-      filePath: resolver.resolve('runtime/components/DucktoryMobileHeader.vue'),
-    })
+  addComponent({
+    name: 'DucktoryMobileHeader',
+    filePath: resolver.resolve('runtime/components/DucktoryMobileHeader.vue'),
+  })
 
-    addComponent({
-      name: 'DucktoryMobileMenu',
-      filePath: resolver.resolve('runtime/components/DucktoryMobileMenu.vue'),
-    })
+  addComponent({
+    name: 'DucktoryMobileMenu',
+    filePath: resolver.resolve('runtime/components/DucktoryMobileMenu.vue'),
   })
 }
 
 function handleHmr(nuxt: Nuxt, options: DucktoryOptions, logger: consola.ConsolaInstance) {
-  nuxt.hook('builder:watch', async (event, path) => {
-    if (!path.includes(options.storyDirectory) || !path.endsWith(`.${options.storyComponentSuffix}.vue`)) {
+  const storyDirAbsPath = path.join(nuxt.options.rootDir, options.storyDirectory)
+
+  nuxt.hook('builder:watch', async (event, watchPath) => {
+    if (!watchPath.includes(options.storyDirectory) || !watchPath.endsWith(`.${options.storyComponentSuffix}.vue`)) {
       return
     }
+
+    const file = watchPath.startsWith(storyDirAbsPath)
+      ? watchPath.substring(storyDirAbsPath.length + 1)
+      : path.basename(watchPath)
 
     logger.debug('Story file changed. Reloading stories...')
     switch (event) {
       case 'add':
-        await addStory(path.substring(options.storyDirectory.length + 1), options, nuxt, logger)
+        await addStory(file, options, nuxt, logger)
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         await nuxt.callHook('ducktory:full-reload' as any)
         break
 
       case 'unlink':
-        await removeStory(path.substring(options.storyDirectory.length + 1), options, logger)
+        await removeStory(file, options, logger)
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         await nuxt.callHook('ducktory:full-reload' as any)
         break
 
-      case 'change':
-        await updateStory(path.substring(options.storyDirectory.length + 1), options, nuxt, logger)
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        await nuxt.callHook('ducktory:full-reload' as any)
+      case 'change': {
+        const metaChanged = await updateStory(file, options, nuxt, logger)
+        if (metaChanged) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          await nuxt.callHook('ducktory:full-reload' as any)
+        }
         break
+      }
     }
   })
 
