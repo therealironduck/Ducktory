@@ -1,18 +1,16 @@
 <script lang="ts" setup>
-import DucktoryQuickButton from '../../src/runtime/components/DucktoryQuickButton.vue'
+import DucktoryQuickButton from "../../src/runtime/components/DucktoryQuickButton.vue";
 
 defineStory({
-  name: 'Quick Button',
-  documentation: 'A square button used for quick actions on the dashboard. Can render as a link when `href` is provided, or as a button otherwise.',
-})
+  name: "Quick Button",
+  documentation:
+    "A square button used for quick actions on the dashboard. Can render as a link when `href` is provided, or as a button otherwise.",
+});
 </script>
 
 <template>
   <div class="ducktory:flex ducktory:gap-4">
-    <DucktoryQuickButton
-      href="https://example.com"
-      label="With Link"
-    >
+    <DucktoryQuickButton href="https://example.com" label="With Link">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         class="ducktory:w-12 ducktory:h-12"
@@ -39,11 +37,7 @@ defineStory({
         stroke-linecap="round"
         stroke-linejoin="round"
       >
-        <circle
-          cx="11"
-          cy="11"
-          r="8"
-        />
+        <circle cx="11" cy="11" r="8" />
         <path d="m21 21-4.3-4.3" />
       </svg>
     </DucktoryQuickButton>

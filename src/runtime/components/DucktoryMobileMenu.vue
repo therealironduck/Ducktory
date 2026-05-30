@@ -1,28 +1,25 @@
 <script lang="ts" setup>
-import { useDucktory } from '#imports'
+import { useDucktory } from "#imports";
 
 defineProps<{
-  open: boolean
-}>()
+  open: boolean;
+}>();
 
 const emit = defineEmits<{
-  close: []
-}>()
+  close: [];
+}>();
 
-const { stories, getName, getPath } = useDucktory()
+const { stories, getName, getPath } = useDucktory();
 
 function handleNavigate() {
-  emit('close')
+  emit("close");
 }
 </script>
 
 <template>
   <Teleport to="body">
     <Transition name="ducktory-menu">
-      <div
-        v-if="open"
-        class="ducktory:fixed ducktory:inset-0 ducktory:z-50 ducktory:flex"
-      >
+      <div v-if="open" class="ducktory:fixed ducktory:inset-0 ducktory:z-50 ducktory:flex">
         <!-- Backdrop -->
         <div
           class="ducktory:absolute ducktory:inset-0 ducktory:bg-black/50"
@@ -45,7 +42,9 @@ function handleNavigate() {
               >
                 Ducktory
               </NuxtLink>
-              <span class="ducktory:text-xs ducktory:font-light ducktory:text-gray ducktory:block">Menu</span>
+              <span class="ducktory:text-xs ducktory:font-light ducktory:text-gray ducktory:block"
+                >Menu</span
+              >
             </div>
             <button
               type="button"
@@ -61,11 +60,7 @@ function handleNavigate() {
                 stroke="currentColor"
                 class="ducktory:w-6 ducktory:h-6"
               >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M6 18 18 6M6 6l12 12"
-                />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
               </svg>
             </button>
           </header>
@@ -106,7 +101,8 @@ function handleNavigate() {
               href="https://github.com/jkniest"
               target="_blank"
               rel="noopener noreferrer"
-            >jkniest</a>
+              >jkniest</a
+            >
           </footer>
         </aside>
       </div>

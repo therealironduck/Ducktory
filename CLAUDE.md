@@ -14,8 +14,10 @@ bun run dev              # Start dev server (generates Tailwind + runs nuxi dev 
 bun run dev:prepare      # Prepare module and playground (run after cloning or changing module structure)
 
 # Quality
-bun run lint             # ESLint with auto-fix
-bun run test:types       # Type checking via vue-tsc (checks both root and playground)
+bun run lint             # oxlint (linting)
+bun run lint:fix         # oxlint with auto-fix
+bun run fmt              # oxfmt (formatting)
+bun run fmt:check        # Check formatting without applying
 
 # Build
 bun run prepack          # Build module for distribution
@@ -59,9 +61,9 @@ Stories are Vue SFCs with `.story.vue` suffix located in the configured `storyDi
 ```vue
 <script lang="ts" setup>
 defineStory({
-  name: 'Button',
-  documentation: 'Optional markdown documentation'
-})
+  name: "Button",
+  documentation: "Optional markdown documentation",
+});
 </script>
 
 <template>
@@ -77,14 +79,14 @@ Configure in `nuxt.config.ts`:
 
 ```typescript
 export default defineNuxtConfig({
-  modules: ['@therealironduck/ducktory'],
+  modules: ["@therealironduck/ducktory"],
   ducktory: {
-    path: '/ducktory',           // URL path
-    enabled: true,               // Disable in production
-    storyDirectory: 'stories',   // Where story files live
-    debug: false,                // Enable verbose logging
-  }
-})
+    path: "/ducktory", // URL path
+    enabled: true, // Disable in production
+    storyDirectory: "stories", // Where story files live
+    debug: false, // Enable verbose logging
+  },
+});
 ```
 
 ### Styling
@@ -94,6 +96,6 @@ Uses Tailwind CSS v4 with `ducktory:` prefix for all utilities. When adding new 
 ## Code Style
 
 - TypeScript with strict mode
-- ESLint flat config with `@nuxt/eslint-config`
-- 2-space indentation, LF line endings
+- oxlint for linting (`.oxlintrc.json`), oxfmt for formatting (`.oxfmtrc.json`)
+- oxfmt auto-sorts imports and Tailwind classes
 - Vue Composition API with `<script setup>`

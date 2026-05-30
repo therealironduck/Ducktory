@@ -1,17 +1,18 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
-import { useDucktory } from '#imports'
+import { ref } from "vue";
 
-const { stories, getName, getPath, version } = useDucktory()
+import { useDucktory } from "#imports";
 
-const mobileMenuOpen = ref(false)
+const { stories, getName, getPath, version } = useDucktory();
+
+const mobileMenuOpen = ref(false);
 
 function toggleMobileMenu() {
-  mobileMenuOpen.value = !mobileMenuOpen.value
+  mobileMenuOpen.value = !mobileMenuOpen.value;
 }
 
 function closeMobileMenu() {
-  mobileMenuOpen.value = false
+  mobileMenuOpen.value = false;
 }
 </script>
 
@@ -21,16 +22,10 @@ function closeMobileMenu() {
     class="ducktory:flex ducktory:flex-col ducktory:lg:flex-row ducktory:min-h-screen ducktory:font-normal ducktory:text-black"
   >
     <!-- Mobile Header -->
-    <DucktoryMobileHeader
-      class="ducktory:lg:hidden"
-      @toggle-menu="toggleMobileMenu"
-    />
+    <DucktoryMobileHeader class="ducktory:lg:hidden" @toggle-menu="toggleMobileMenu" />
 
     <!-- Mobile Menu -->
-    <DucktoryMobileMenu
-      :open="mobileMenuOpen"
-      @close="closeMobileMenu"
-    />
+    <DucktoryMobileMenu :open="mobileMenuOpen" @close="closeMobileMenu" />
 
     <!-- Desktop Sidebar -->
     <aside
@@ -45,7 +40,9 @@ function closeMobileMenu() {
         >
           Ducktory
         </NuxtLink>
-        <span class="ducktory:text-xs ducktory:font-light ducktory:text-gray">Version {{ version }}</span>
+        <span class="ducktory:text-xs ducktory:font-light ducktory:text-gray"
+          >Version {{ version }}</span
+        >
       </header>
 
       <section class="ducktory:mt-2">
@@ -83,7 +80,8 @@ function closeMobileMenu() {
           href="https://github.com/jkniest"
           target="_blank"
           rel="noopener noreferrer"
-        >jkniest</a>
+          >jkniest</a
+        >
       </footer>
     </aside>
     <main

@@ -1,11 +1,11 @@
-import type { DucktoryIntegration } from '../../types/DucktoryIntegration'
+import type { DucktoryIntegration } from "../../types/DucktoryIntegration";
 
 export const i18nIntegration = {
   info: {
-    name: 'Nuxt i18n',
+    name: "Nuxt i18n",
   },
 
   isEnabled() {
-    return false
+    return false;
   },
-} satisfies DucktoryIntegration
+} satisfies DucktoryIntegration;

@@ -1,15 +1,17 @@
 <script lang="ts" setup>
-import { useDucktory } from '#imports'
+import { useDucktory } from "#imports";
 
 defineEmits<{
-  toggleMenu: []
-}>()
+  toggleMenu: [];
+}>();
 
-const { version, getPath } = useDucktory()
+const { version, getPath } = useDucktory();
 </script>
 
 <template>
-  <header class="ducktory:bg-secondary ducktory:px-4 ducktory:py-3 ducktory:flex ducktory:items-center ducktory:gap-2">
+  <header
+    class="ducktory:bg-secondary ducktory:px-4 ducktory:py-3 ducktory:flex ducktory:items-center ducktory:gap-2"
+  >
     <button
       type="button"
       class="ducktory:text-primary ducktory:p-2"
@@ -38,7 +40,9 @@ const { version, getPath } = useDucktory()
       >
         Ducktory
       </NuxtLink>
-      <span class="ducktory:text-xs ducktory:font-light ducktory:text-gray ducktory:block">Version {{ version }}</span>
+      <span class="ducktory:text-xs ducktory:font-light ducktory:text-gray ducktory:block"
+        >Version {{ version }}</span
+      >
     </div>
   </header>
 </template>

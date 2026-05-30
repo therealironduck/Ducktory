@@ -1,17 +1,29 @@
-import path from 'node:path'
-import type { Resolver } from '@nuxt/kit'
-import { addComponent, addImportsDir, addLayout, addTemplate, addTypeTemplate, addVitePlugin, createResolver, defineNuxtModule, useLogger } from '@nuxt/kit'
-import type { HookResult, Nuxt } from '@nuxt/schema'
-import type * as consola from 'consola'
-import { addStory, loadStoryTemplate, removeStory, updateStory } from './build/stories'
-import { extendBundler } from './build/bundler'
-import { readFileSync } from 'node:fs'
-import { loadIntegrations } from './build/integrations'
+import type { Resolver } from "@nuxt/kit";
+import type { HookResult, Nuxt } from "@nuxt/schema";
+import type * as consola from "consola";
 
-declare module '#app' {
+import {
+  addComponent,
+  addImportsDir,
+  addLayout,
+  addTemplate,
+  addTypeTemplate,
+  addVitePlugin,
+  createResolver,
+  defineNuxtModule,
+  useLogger,
+} from "@nuxt/kit";
+import { readFileSync } from "node:fs";
+import path from "node:path";
+
+import { extendBundler } from "./build/bundler";
+import { loadIntegrations } from "./build/integrations";
+import { addStory, loadStoryTemplate, removeStory, updateStory } from "./build/stories";
+
+declare module "#app" {
   // noinspection JSUnusedGlobalSymbols
   interface NuxtHooks {
-    'ducktory:full-reload': () => HookResult
+    "ducktory:full-reload": () => HookResult;
   }
 }
 
@@ -20,40 +32,40 @@ export interface DucktoryOptions {
    * The path where ducktory will be available
    * @default '/ducktory'
    */
-  path: string
+  path: string;
 
   /**
    * Enable or disable ducktory. This option can be used to disable
    * ducktory in production.
    * @default true
    */
-  enabled: boolean
+  enabled: boolean;
 
   /**
    * The prefix for story components. It is recommended to not change this
    * unless you know what you are doing.
    * @default 'Ducktory'
    */
-  storyComponentPrefix: string
+  storyComponentPrefix: string;
 
   /**
    * Enable debug mode. This will log additional information to the console.
    * @default false
    */
-  debug: boolean
+  debug: boolean;
 
   /**
    * The directory where stories are located relative to the root directory.
    * @default 'stories'
    */
-  storyDirectory: string
+  storyDirectory: string;
 
   /**
    * The file suffix for story components. It is recommended to not change this
    * unless you know what you are doing.
    * @default 'story'
    */
-  storyComponentSuffix: string
+  storyComponentSuffix: string;
 
   // TODO: Allow to manually disable integrations
 }
@@ -61,53 +73,53 @@ export interface DucktoryOptions {
 // noinspection JSUnusedGlobalSymbols
 export default defineNuxtModule<DucktoryOptions>({
   meta: {
-    name: 'ducktory',
-    configKey: 'ducktory',
+    name: "ducktory",
+    configKey: "ducktory",
   },
 
   defaults: {
-    path: '/ducktory',
+    path: "/ducktory",
     enabled: true,
-    storyComponentPrefix: 'Ducktory',
+    storyComponentPrefix: "Ducktory",
     debug: false,
-    storyDirectory: 'stories',
-    storyComponentSuffix: 'story',
+    storyDirectory: "stories",
+    storyComponentSuffix: "story",
   },
 
   async setup(options: DucktoryOptions, nuxt: Nuxt) {
     if (!options.enabled) {
-      return
+      return;
     }
 
-    const logger = useLogger('Ducktory', { level: options.debug ? 4 : 3 })
+    const logger = useLogger("Ducktory", { level: options.debug ? 4 : 3 });
 
-    logger.info('Ducktory Ready!')
-    const resolver = createResolver(import.meta.url)
+    logger.info("Ducktory Ready!");
+    const resolver = createResolver(import.meta.url);
 
     /**
      * Load all the metadata for existing stories and store them in a template
      * which can be used to render the stories runtime.
      */
-    await loadStoryTemplate(options, nuxt, logger)
+    await loadStoryTemplate(options, nuxt, logger);
 
     /**
      * Load all integrations and prepare the information for the frontend.
      * This also allows the integrations to register custom hooks and
      * modify the Nuxt Options.
      */
-    loadIntegrations(logger)
+    loadIntegrations(logger);
 
     /**
      * Extend the vite bundler to remove the `defineStoryMeta` composable from the final
      * build since it is only needed for the story template loading.
      */
-    extendBundler(nuxt)
+    extendBundler(nuxt);
 
     /**
      * Register the ducktory home page and story subpage. Also register the layout
      * both pages use.
      */
-    registerPages(resolver, options, nuxt)
+    registerPages(resolver, options, nuxt);
 
     /**
      * Autoload the stories directory as a global component directory.
@@ -116,138 +128,141 @@ export default defineNuxtModule<DucktoryOptions>({
      *
      * Additionally it will register global components which can be used in stories.
      */
-    extendComponents(nuxt, options, resolver)
+    extendComponents(nuxt, options, resolver);
 
     /**
      * Add the tailwind and font css to the nuxt options, so they are included in the build.
      * Also, add the composable directory to the imports. This is needed to make the
      * `defineStoryMeta` composable available in the stories.
      */
-    nuxt.options.css.push(resolver.resolve('./runtime/assets/tailwind.css'))
-    nuxt.options.css.push(resolver.resolve('./runtime/assets/fonts.css'))
+    nuxt.options.css.push(resolver.resolve("./runtime/assets/tailwind.css"));
+    nuxt.options.css.push(resolver.resolve("./runtime/assets/fonts.css"));
 
-    addImportsDir(resolver.resolve('runtime/composables'))
+    addImportsDir(resolver.resolve("runtime/composables"));
 
     /**
      * Handle hot module reloading for story files. When a story file changes, the stories
      * will be reloaded and the browser will be notified to reload the page.
      */
-    handleHmr(nuxt, options, logger)
+    handleHmr(nuxt, options, logger);
 
     /**
      * Register custom types for nuxt. This is needed to make the `useLocalePath` composable not
      * throw an error if NuxtI18n is not installed.
      */
-    registerCustomTypes()
+    registerCustomTypes();
 
     /**
      * Publish the current package.json version to be used in templates
      */
-    publishVersion(resolver)
+    publishVersion(resolver);
   },
-})
+});
 
 function registerPages(resolver: Resolver, options: DucktoryOptions, nuxt: Nuxt) {
-  addLayout(resolver.resolve('runtime/ducktoryLayout.vue'), 'ducktory')
-  nuxt.hook('pages:extend', (pages) => {
+  addLayout(resolver.resolve("runtime/ducktoryLayout.vue"), "ducktory");
+  nuxt.hook("pages:extend", (pages) => {
     pages.push({
-      name: 'ducktory',
+      name: "ducktory",
       path: options.path,
-      file: resolver.resolve('runtime/pages/index.vue'),
-      meta: { layout: 'ducktory' },
-    })
+      file: resolver.resolve("runtime/pages/index.vue"),
+      meta: { layout: "ducktory" },
+    });
 
     pages.push({
-      name: 'ducktory-story',
-      path: path.join(options.path, '/:story'),
-      file: resolver.resolve('runtime/pages/story.vue'),
-      meta: { layout: 'ducktory' },
-    })
-  })
+      name: "ducktory-story",
+      path: path.join(options.path, "/:story"),
+      file: resolver.resolve("runtime/pages/story.vue"),
+      meta: { layout: "ducktory" },
+    });
+  });
 }
 
 function extendComponents(nuxt: Nuxt, options: DucktoryOptions, resolver: Resolver) {
-  nuxt.hook('components:dirs', (dirs) => {
+  nuxt.hook("components:dirs", (dirs) => {
     dirs.push({
       path: path.join(nuxt.options.rootDir, options.storyDirectory),
       prefix: options.storyComponentPrefix,
       extensions: [`${options.storyComponentSuffix}.vue`],
       global: true,
-    })
-  })
+    });
+  });
 
   addComponent({
-    name: 'DucktoryDocumentation',
-    filePath: resolver.resolve('runtime/components/DucktoryDocumentation.vue'),
-  })
+    name: "DucktoryDocumentation",
+    filePath: resolver.resolve("runtime/components/DucktoryDocumentation.vue"),
+  });
 
   addComponent({
-    name: 'DucktoryMobileHeader',
-    filePath: resolver.resolve('runtime/components/DucktoryMobileHeader.vue'),
-  })
+    name: "DucktoryMobileHeader",
+    filePath: resolver.resolve("runtime/components/DucktoryMobileHeader.vue"),
+  });
 
   addComponent({
-    name: 'DucktoryMobileMenu',
-    filePath: resolver.resolve('runtime/components/DucktoryMobileMenu.vue'),
-  })
+    name: "DucktoryMobileMenu",
+    filePath: resolver.resolve("runtime/components/DucktoryMobileMenu.vue"),
+  });
 }
 
 function handleHmr(nuxt: Nuxt, options: DucktoryOptions, logger: consola.ConsolaInstance) {
-  const storyDirAbsPath = path.join(nuxt.options.rootDir, options.storyDirectory)
+  const storyDirAbsPath = path.join(nuxt.options.rootDir, options.storyDirectory);
 
-  nuxt.hook('builder:watch', async (event, watchPath) => {
-    if (!watchPath.includes(options.storyDirectory) || !watchPath.endsWith(`.${options.storyComponentSuffix}.vue`)) {
-      return
+  nuxt.hook("builder:watch", async (event, watchPath) => {
+    if (
+      !watchPath.includes(options.storyDirectory) ||
+      !watchPath.endsWith(`.${options.storyComponentSuffix}.vue`)
+    ) {
+      return;
     }
 
     const file = watchPath.startsWith(storyDirAbsPath)
       ? watchPath.substring(storyDirAbsPath.length + 1)
-      : path.basename(watchPath)
+      : path.basename(watchPath);
 
-    logger.debug('Story file changed. Reloading stories...')
+    logger.debug("Story file changed. Reloading stories...");
     switch (event) {
-      case 'add':
-        await addStory(file, options, nuxt, logger)
+      case "add":
+        await addStory(file, options, nuxt, logger);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        await nuxt.callHook('ducktory:full-reload' as any)
-        break
+        await nuxt.callHook("ducktory:full-reload" as any);
+        break;
 
-      case 'unlink':
-        await removeStory(file, options, logger)
+      case "unlink":
+        await removeStory(file, options, logger);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        await nuxt.callHook('ducktory:full-reload' as any)
-        break
+        await nuxt.callHook("ducktory:full-reload" as any);
+        break;
 
-      case 'change': {
-        const metaChanged = await updateStory(file, options, nuxt, logger)
+      case "change": {
+        const metaChanged = await updateStory(file, options, nuxt, logger);
         if (metaChanged) {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          await nuxt.callHook('ducktory:full-reload' as any)
+          await nuxt.callHook("ducktory:full-reload" as any);
         }
-        break
+        break;
       }
     }
-  })
+  });
 
   // @see https://github.com/nuxt/nuxt/issues/21690
   addVitePlugin({
-    name: 'ducktory-hmr-plugin',
+    name: "ducktory-hmr-plugin",
     configureServer(server) {
-      server.ws.on('connection', () => {
+      server.ws.on("connection", () => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        nuxt.hook('ducktory:full-reload' as any, () => {
+        nuxt.hook("ducktory:full-reload" as any, () => {
           setTimeout(() => {
-            server.ws.send({ type: 'full-reload' })
-          }, 1000)
-        })
-      })
+            server.ws.send({ type: "full-reload" });
+          }, 1000);
+        });
+      });
     },
-  })
+  });
 }
 
 function registerCustomTypes() {
   addTypeTemplate({
-    filename: 'ducktory-types.d.ts',
+    filename: "ducktory-types.d.ts",
     getContents: () => `
         declare global {
           function useLocalePath(): (args: { name: string, params: Record<string, string> }) => any | undefined;
@@ -255,18 +270,18 @@ function registerCustomTypes() {
 
         export {}
       `,
-  })
+  });
 }
 
 function publishVersion(resolver: Resolver) {
-  const packageJson = JSON.parse(readFileSync(resolver.resolve('../package.json'), 'utf-8'))
-  const version = packageJson.version
+  const packageJson = JSON.parse(readFileSync(resolver.resolve("../package.json"), "utf-8"));
+  const version = packageJson.version;
 
   // Add the version to a Nuxt template
   addTemplate({
-    filename: 'ducktory-version.mjs',
+    filename: "ducktory-version.mjs",
     getContents: () => `
         export const ducktoryVersion = '${version}';
       `,
-  })
+  });
 }
