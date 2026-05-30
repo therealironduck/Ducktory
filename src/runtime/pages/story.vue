@@ -1,45 +1,59 @@
 <script lang="ts" setup>
-import { codeToHtml } from 'shiki'
-import { provide, computed, ref, watch } from 'vue'
-import { useDucktory } from '../composables/useDucktory'
-import { useHead, useRoute } from '#app'
-import type { StoryDefinition } from '../../types/StoryDefinition'
-import type { CustomVNode } from '../../types/VNodeMagic'
+import { codeToHtml } from "shiki";
+import { provide, computed, ref, watch } from "vue";
 
-const { stories, getName } = useDucktory()
-const { params } = useRoute()
+import { useHead, useRoute } from "#app";
 
-const story = computed(() => stories[params.story as string] ?? null)
-const title = computed(() => story.value ? getName(story.value) : '')
-const pageTitle = computed(() => `Ducktory - ${title.value || 'Not Found'}`)
-const componentDocumentation = ref<CustomVNode[] | undefined>(undefined)
+import type { StoryDefinition } from "../../types/StoryDefinition";
+import type { CustomVNode } from "../../types/VNodeMagic";
 
-provide('ducktory-documentation', componentDocumentation)
+import { useDucktory } from "../composables/useDucktory";
 
-const codeHighlight = ref('Loading...')
-const justCopied = ref(false)
+const { stories, getName } = useDucktory();
+const { params } = useRoute();
 
-const hasDocumentation = computed(() => story.value?.meta?.documentation !== undefined || (componentDocumentation.value?.length ?? 0) > 0)
-const documentation = computed(() => story.value?.meta?.documentation ?? undefined)
+const story = computed(() => stories[params.story as string] ?? null);
+const title = computed(() => (story.value ? getName(story.value) : ""));
+const pageTitle = computed(() => `Ducktory - ${title.value || "Not Found"}`);
+const componentDocumentation = ref<CustomVNode[] | undefined>(undefined);
+
+provide("ducktory-documentation", componentDocumentation);
+
+const codeHighlight = ref("Loading...");
+const justCopied = ref(false);
+
+const hasDocumentation = computed(
+  () =>
+    story.value?.meta?.documentation !== undefined ||
+    (componentDocumentation.value?.length ?? 0) > 0,
+);
+const documentation = computed(() => story.value?.meta?.documentation ?? undefined);
 
 useHead({
   title: pageTitle,
-})
+});
 
-watch(story, async (newStory: StoryDefinition | null) => {
-  if (!newStory) return
+watch(
+  story,
+  async (newStory: StoryDefinition | null) => {
+    if (!newStory) return;
 
-  codeHighlight.value = await codeToHtml(newStory.code + '\n', { lang: 'html', theme: 'catppuccin-latte' })
-}, { immediate: true })
+    codeHighlight.value = await codeToHtml(newStory.code + "\n", {
+      lang: "html",
+      theme: "catppuccin-latte",
+    });
+  },
+  { immediate: true },
+);
 
 function copy() {
-  if (!story.value) return
+  if (!story.value) return;
 
-  navigator.clipboard.writeText(story.value.code)
-  justCopied.value = true
+  navigator.clipboard.writeText(story.value.code);
+  justCopied.value = true;
   setTimeout(() => {
-    justCopied.value = false
-  }, 1500)
+    justCopied.value = false;
+  }, 1500);
 }
 </script>
 
@@ -56,37 +70,27 @@ function copy() {
     >
       <ClientOnly>
         <template v-if="(componentDocumentation?.length ?? 0) > 0">
-          <component
-            :is="(node)"
-            v-for="(node, idx) in componentDocumentation"
-            :key="idx"
-          />
+          <component :is="node" v-for="(node, idx) in componentDocumentation" :key="idx" />
         </template>
-        <div
-          v-else
-          v-html="documentation"
-        />
+        <div v-else v-html="documentation" />
       </ClientOnly>
     </section>
 
-    <section class="ducktory:text-secondary ducktory:bg-white ducktory:rounded-2xl ducktory:mt-6 ducktory:p-6 ducktory:overflow-hidden">
-      <h2 class="ducktory:text-xl ducktory:text-center ducktory:mb-4">
-        Preview
-      </h2>
+    <section
+      class="ducktory:text-secondary ducktory:bg-white ducktory:rounded-2xl ducktory:mt-6 ducktory:p-6 ducktory:overflow-hidden"
+    >
+      <h2 class="ducktory:text-xl ducktory:text-center ducktory:mb-4">Preview</h2>
 
       <div class="ducktory:overflow-x-auto ducktory-preview-wrapper">
-        <component
-          :is="story.componentName"
-          ref="preview"
-        />
+        <component :is="story.componentName" ref="preview" />
       </div>
     </section>
 
-    <section class="ducktory:text-secondary ducktory:bg-white ducktory:rounded-2xl ducktory:p-6 ducktory:mt-6 ducktory:overflow-hidden">
+    <section
+      class="ducktory:text-secondary ducktory:bg-white ducktory:rounded-2xl ducktory:p-6 ducktory:mt-6 ducktory:overflow-hidden"
+    >
       <div class="ducktory:mb-4 ducktory:text-center">
-        <h2 class="ducktory:text-xl">
-          Source Code
-        </h2>
+        <h2 class="ducktory:text-xl">Source Code</h2>
         <span class="ducktory:text-sm">{{ story.originalComponentName }}.story.vue</span>
       </div>
 
@@ -104,13 +108,11 @@ function copy() {
       </div>
     </section>
   </template>
-  <div v-else>
-    Story not found
-  </div>
+  <div v-else>Story not found</div>
 </template>
 
 <style>
-.ducktory-code-wrapper>pre {
+.ducktory-code-wrapper > pre {
   min-width: fit-content;
   padding-top: 1rem;
   padding-bottom: 1rem;

@@ -1,3 +1,1 @@
-<template>
-  This is not a story
-</template>
+<template>This is not a story</template>

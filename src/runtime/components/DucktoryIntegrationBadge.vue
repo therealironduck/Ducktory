@@ -1,20 +1,23 @@
 <script lang="ts" setup>
-import { computed } from '#imports'
-import type { DucktoryIntegrationInfo } from '../../types/DucktoryIntegration'
+import { computed } from "#imports";
+
+import type { DucktoryIntegrationInfo } from "../../types/DucktoryIntegration";
 
 const props = defineProps<{
-  integration: DucktoryIntegrationInfo
-}>()
+  integration: DucktoryIntegrationInfo;
+}>();
 
 const wrapperClasses = computed(() => [
-  'ducktory:rounded-xl ducktory:py-2 ducktory:px-4 ducktory:flex ducktory:items-center ducktory:gap-2',
+  "ducktory:rounded-xl ducktory:py-2 ducktory:px-4 ducktory:flex ducktory:items-center ducktory:gap-2",
   {
-    'ducktory:bg-success ducktory:text-white': props.integration.enabled,
-    'ducktory:bg-secondary ducktory:text-gray': !props.integration.enabled,
+    "ducktory:bg-success ducktory:text-white": props.integration.enabled,
+    "ducktory:bg-secondary ducktory:text-gray": !props.integration.enabled,
   },
-])
+]);
 
-const label = computed(() => `${props.integration.name} ${props.integration.enabled ? 'enabled' : 'disabled'}`)
+const label = computed(
+  () => `${props.integration.name} ${props.integration.enabled ? "enabled" : "disabled"}`,
+);
 </script>
 
 <template>

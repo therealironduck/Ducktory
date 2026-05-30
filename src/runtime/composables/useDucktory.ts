@@ -1,35 +1,36 @@
-import type { StoryDefinition } from '../../types/StoryDefinition'
-import { stories as raw } from '#build/ducktory-stories.mjs'
-import { integrations as rawIntegrations } from '#build/ducktory-integrations.mjs'
-import { ducktoryVersion } from '#build/ducktory-version.mjs'
-import { useNuxtApp } from '#app'
-import { computed } from '#imports'
-import type { DucktoryIntegrationInfo } from '../../types/DucktoryIntegration'
+import { useNuxtApp } from "#app";
+import { integrations as rawIntegrations } from "#build/ducktory-integrations.mjs";
+import { stories as raw } from "#build/ducktory-stories.mjs";
+import { ducktoryVersion } from "#build/ducktory-version.mjs";
+import { computed } from "#imports";
+
+import type { DucktoryIntegrationInfo } from "../../types/DucktoryIntegration";
+import type { StoryDefinition } from "../../types/StoryDefinition";
 
 export function useDucktory() {
-  const app = useNuxtApp()
-  const stories = raw as { [k: string]: StoryDefinition }
-  const storyCount = computed(() => Object.keys(stories).length)
+  const app = useNuxtApp();
+  const stories = raw as { [k: string]: StoryDefinition };
+  const storyCount = computed(() => Object.keys(stories).length);
 
-  const integrations = rawIntegrations as { [k: string]: DucktoryIntegrationInfo }
+  const integrations = rawIntegrations as { [k: string]: DucktoryIntegrationInfo };
 
   const getName = (story: StoryDefinition): string => {
-    return story.meta?.name || splitPascalCase(story.originalComponentName)
-  }
+    return story.meta?.name || splitPascalCase(story.originalComponentName);
+  };
 
   const getPath = (routeName: string, params: Record<string, string> = {}) => {
-    const routeDefinition = { name: routeName, params }
+    const routeDefinition = { name: routeName, params };
 
-    if (typeof app.$localePath === 'function') {
-      return app.$localePath(routeDefinition)
+    if (typeof app.$localePath === "function") {
+      return app.$localePath(routeDefinition);
     }
 
-    return routeDefinition
-  }
+    return routeDefinition;
+  };
 
   const v = computed(() => {
-    return ducktoryVersion
-  })
+    return ducktoryVersion;
+  });
 
   return {
     stories,
@@ -38,9 +39,9 @@ export function useDucktory() {
     getName,
     getPath,
     version: v,
-  }
+  };
 }
 
 function splitPascalCase(word: string): string {
-  return word.replace(/([A-Z])/g, ' $1').trim()
+  return word.replace(/([A-Z])/g, " $1").trim();
 }

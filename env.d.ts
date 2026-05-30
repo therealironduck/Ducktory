@@ -1,1 +1,1 @@
-declare module '#build/ducktory-stories.mjs';
+declare module "#build/ducktory-stories.mjs";

@@ -1,11 +1,11 @@
-import type { DucktoryIntegration } from '../../types/DucktoryIntegration'
+import type { DucktoryIntegration } from "../../types/DucktoryIntegration";
 
 export const tailwindIntegration = {
   info: {
-    name: 'Tailwind CSS',
+    name: "Tailwind CSS",
   },
 
   isEnabled() {
-    return false
+    return false;
   },
-} satisfies DucktoryIntegration
+} satisfies DucktoryIntegration;

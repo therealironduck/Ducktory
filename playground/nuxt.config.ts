@@ -1,11 +1,11 @@
 export default defineNuxtConfig({
-  modules: ['../src/module', '@nuxtjs/i18n', '@nuxt/ui'],
+  modules: ["../src/module", "@nuxtjs/i18n", "@nuxt/ui"],
 
   devtools: { enabled: true },
 
-  css: ['~/assets/css/main.css'],
+  css: ["~/assets/css/main.css"],
 
-  compatibilityDate: '2025-03-29',
+  compatibilityDate: "2025-03-29",
 
   ducktory: {
     enabled: true,
@@ -13,19 +13,19 @@ export default defineNuxtConfig({
   },
 
   i18n: {
-    vueI18n: './i18n.config.ts',
-    strategy: 'prefix_except_default',
-    defaultLocale: 'de-DE',
+    vueI18n: "./i18n.config.ts",
+    strategy: "prefix_except_default",
+    defaultLocale: "de-DE",
     detectBrowserLanguage: false,
     locales: [
       {
-        code: 'de-DE',
-        files: ['de-DE/messages.json'],
+        code: "de-DE",
+        files: ["de-DE/messages.json"],
       },
       {
-        code: 'en-GB',
-        files: ['en-GB/messages.json'],
+        code: "en-GB",
+        files: ["en-GB/messages.json"],
       },
     ],
   },
-})
+});
