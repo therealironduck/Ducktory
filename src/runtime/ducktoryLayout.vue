@@ -36,7 +36,9 @@ function closeMobileMenu() {
     <aside
       class="ducktory:hidden ducktory:lg:flex ducktory:w-72 ducktory:shrink-0 ducktory:bg-secondary ducktory:flex-col"
     >
-      <header class="ducktory:py-4 ducktory:px-8 ducktory:border-b ducktory:border-b-primary ducktory:text-center ducktory:-space-y-2">
+      <header
+        class="ducktory:py-4 ducktory:px-8 ducktory:border-b ducktory:border-b-primary ducktory:text-center ducktory:-space-y-2"
+      >
         <NuxtLink
           :to="getPath('ducktory')"
           class="ducktory:text-2xl ducktory:font-bold ducktory:text-primary block"
@@ -72,11 +74,15 @@ function closeMobileMenu() {
         </NuxtLink>
       </section>
 
-      <footer class="ducktory:mt-auto ducktory:text-gray ducktory:text-xs ducktory:p-2 ducktory:text-center">
-        Made with ❤️ by <a
+      <footer
+        class="ducktory:mt-auto ducktory:text-gray ducktory:text-xs ducktory:p-2 ducktory:text-center"
+      >
+        Made with ❤️ by
+        <a
           class="ducktory:text-gray ducktory:underline"
           href="https://github.com/jkniest"
           target="_blank"
+          rel="noopener noreferrer"
         >jkniest</a>
       </footer>
     </aside>

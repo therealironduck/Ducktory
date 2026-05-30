@@ -30,9 +30,13 @@ function handleNavigate() {
         />
 
         <!-- Menu Panel -->
-        <aside class="ducktory:relative ducktory:w-72 ducktory:max-w-[80vw] ducktory:bg-secondary ducktory:flex ducktory:flex-col ducktory:h-full">
+        <aside
+          class="ducktory:relative ducktory:w-72 ducktory:max-w-[80vw] ducktory:bg-secondary ducktory:flex ducktory:flex-col ducktory:h-full"
+        >
           <!-- Header with close button -->
-          <header class="ducktory:py-4 ducktory:px-4 ducktory:border-b ducktory:border-b-primary ducktory:flex ducktory:items-center ducktory:justify-between">
+          <header
+            class="ducktory:py-4 ducktory:px-4 ducktory:border-b ducktory:border-b-primary ducktory:flex ducktory:items-center ducktory:justify-between"
+          >
             <div class="ducktory:-space-y-2">
               <NuxtLink
                 :to="getPath('ducktory')"
@@ -96,10 +100,12 @@ function handleNavigate() {
 
           <!-- Footer -->
           <footer class="ducktory:text-gray ducktory:text-xs ducktory:p-2 ducktory:text-center">
-            Made with ❤️ by <a
+            Made with ❤️ by
+            <a
               class="ducktory:text-gray ducktory:underline"
               href="https://github.com/jkniest"
               target="_blank"
+              rel="noopener noreferrer"
             >jkniest</a>
           </footer>
         </aside>
