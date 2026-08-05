@@ -36,7 +36,7 @@
     "@vue/compiler-sfc": "^3.5.27",
     "consola": "^3.4.2",
     "estree-walker": "^3.0.3",
-    "magic-string": "^0.30.21",
+    "magic-string": "^1.1.0",
     "shiki": "^4.0.2",
     "unplugin": "^3.0.0"
   },
@@ -52,6 +52,6 @@
     "oxlint-tsgolint": "^0.23.0",
     "semantic-release": "^25.0.2",
     "tailwindcss": "^4.1.18",
-    "typescript": "^6.0.2"
+    "typescript": "^7.0.2"
   }
 }
