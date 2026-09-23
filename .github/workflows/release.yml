@@ -14,7 +14,7 @@ jobs:
     steps:
       - name: Run ReleaseMe
         id: release
-        uses: dev-build-deploy/release-me@945aedfd474121dfb076395bbf940ba71f04af09 # v1.0.0
+        uses: dev-build-deploy/release-me@cede87fd8a4829ef571dff6bde807ebbfcaeb3e9 # v1.1.0
         with:
           token: ${{ github.token }}
 
