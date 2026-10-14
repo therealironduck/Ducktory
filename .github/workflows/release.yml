@@ -14,7 +14,7 @@ jobs:
     steps:
       - name: Run ReleaseMe
         id: release
-        uses: dev-build-deploy/release-me@945aedfd474121dfb076395bbf940ba71f04af09 # v1.0.0
+        uses: dev-build-deploy/release-me@cede87fd8a4829ef571dff6bde807ebbfcaeb3e9 # v1.1.0
         with:
           token: ${{ github.token }}
 
@@ -31,7 +31,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24.x
           registry-url: https://registry.npmjs.org
